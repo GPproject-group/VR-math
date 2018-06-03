@@ -19941,9 +19941,6 @@ MonoBehaviour:
   autoManageVRSettings: 1
   autoLoadSetup: 1
   setups:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 1107519342}
   - {fileID: 1107519340}
 --- !u!4 &1781418447
