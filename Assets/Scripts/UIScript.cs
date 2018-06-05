@@ -7,6 +7,7 @@ public class UIScript : MonoBehaviour {
     public GameObject initMenu;
     public GameObject mainMenu;
     public GameObject modelMenu;
+	public GameObject functionMenu;
     public GameObject cancelButton;
 	// Use this for initialization
 	void Start () {
@@ -45,6 +46,19 @@ public class UIScript : MonoBehaviour {
             btn.DOScale(Vector3.one, 0.3f).SetDelay(i * 0.1f);
         }
     }
+
+	public void showFunctionInput()
+	{
+		mainMenu.SetActive (false);
+		functionMenu.SetActive (true);
+		cancelButton.SetActive (true);
+		int cnt = functionMenu.transform.childCount;
+		for (int i = 0; i < cnt; i++) {
+			Transform btn = functionMenu.transform.GetChild (i);
+			btn.transform.localScale = Vector3.zero;
+			btn.DOScale (Vector3.one, 0.3f).SetDelay (i * 0.1f);
+		}
+	}
 
     public void selectModel()
     {

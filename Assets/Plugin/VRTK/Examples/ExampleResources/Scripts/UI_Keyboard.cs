@@ -1,11 +1,10 @@
-﻿namespace VRTK.Examples
-{
+﻿
     using UnityEngine;
     using UnityEngine.UI;
 
     public class UI_Keyboard : MonoBehaviour
     {
-        private InputField input;
+        public InputField input;
 
         public void ClickKey(string character)
         {
@@ -22,13 +21,12 @@
 
         public void Enter()
         {
-            VRTK_Logger.Info("You've typed [" + input.text + "]");
-            input.text = "";
+			gameObject.SetActive (false);
+            //VRTK_Logger.Info("You've typed [" + input.text + "]");
+            //input.text = "";
         }
-
         private void Start()
         {
-            input = GetComponentInChildren<InputField>();
+            //input = GetComponentInChildren<InputField>();
         }
     }
-}
