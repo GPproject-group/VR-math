@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 
 public class UIScript : MonoBehaviour {
@@ -47,7 +48,7 @@ public class UIScript : MonoBehaviour {
         }
     }
 
-	public void showFunctionInput()
+	public void showFunctionMenu()
 	{
 		mainMenu.SetActive (false);
 		functionMenu.SetActive (true);
@@ -59,6 +60,23 @@ public class UIScript : MonoBehaviour {
 			btn.DOScale (Vector3.one, 0.3f).SetDelay (i * 0.1f);
 		}
 	}
+
+    public void confirmFunction()
+    {      
+        cancelButton.SetActive(false);
+        initMenu.SetActive(true);
+        float k1 = float.Parse(GameObject.Find("Canvas/FunMenu/k1").GetComponent<InputField>().text);
+        float k2 = float.Parse(GameObject.Find("Canvas/FunMenu/k2").GetComponent<InputField>().text);
+        float k3 = float.Parse(GameObject.Find("Canvas/FunMenu/k3").GetComponent<InputField>().text);
+        float b = float.Parse(GameObject.Find("Canvas/FunMenu/b").GetComponent<InputField>().text);
+        float[] args = { k1, k2, k3, b };
+        Vector2 domain = new Vector2(-5, 5);
+        GameObject function = GameObject.Find("Axis/FunctionRender");
+        function.GetComponent<FunctionDisplayScript>().args = args;
+        function.GetComponent<FunctionDisplayScript>().domain = domain;
+        function.GetComponent<FunctionDisplayScript>().draw = true;
+        functionMenu.SetActive(false);
+    }
 
     public void selectModel()
     {
@@ -80,6 +98,7 @@ public class UIScript : MonoBehaviour {
         mainMenu.SetActive(false);
         initMenu.SetActive(true);
         cancelButton.SetActive(false);
+        functionMenu.SetActive(false);
         int cnt = initMenu.transform.childCount;
         for (int i = 0; i < cnt; i++)
         {
