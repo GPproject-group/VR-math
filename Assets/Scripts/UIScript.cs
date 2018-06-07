@@ -8,7 +8,9 @@ public class UIScript : MonoBehaviour {
     public GameObject initMenu;
     public GameObject mainMenu;
     public GameObject modelMenu;
-	public GameObject functionMenu;
+    public GameObject funcMenu;
+	public GameObject polynomialFuncMenu;
+    public GameObject exponentialFuncMenu;
     public GameObject cancelButton;
 	// Use this for initialization
 	void Start () {
@@ -48,34 +50,91 @@ public class UIScript : MonoBehaviour {
         }
     }
 
-	public void showFunctionMenu()
+    public void showFuncMenu()
+    {
+        mainMenu.SetActive(false);
+        funcMenu.SetActive(true);
+        cancelButton.SetActive(true);
+        int cnt = funcMenu.transform.childCount;
+        for (int i = 0; i < cnt; i++)
+        {
+            Transform btn = funcMenu.transform.GetChild(i);
+            btn.transform.localScale = Vector3.zero;
+            btn.DOScale(Vector3.one, 0.3f).SetDelay(i * 0.1f);
+        }
+    }
+
+    public void showPolynomialFunctionMenu()
 	{
-		mainMenu.SetActive (false);
-		functionMenu.SetActive (true);
+		funcMenu.SetActive (false);
+        polynomialFuncMenu.SetActive (true);
 		cancelButton.SetActive (true);
-		int cnt = functionMenu.transform.childCount;
+		int cnt = polynomialFuncMenu.transform.childCount;
 		for (int i = 0; i < cnt; i++) {
-			Transform btn = functionMenu.transform.GetChild (i);
+			Transform btn = polynomialFuncMenu.transform.GetChild (i);
 			btn.transform.localScale = Vector3.zero;
 			btn.DOScale (Vector3.one, 0.3f).SetDelay (i * 0.1f);
 		}
 	}
 
-    public void confirmFunction()
+    public void showExponentialFunctionMenu()
+    {
+        funcMenu.SetActive(false);
+        exponentialFuncMenu.SetActive(true);
+        cancelButton.SetActive(true);
+        int cnt = exponentialFuncMenu.transform.childCount;
+        for (int i = 0; i < cnt; i++)
+        {
+            Transform btn = exponentialFuncMenu.transform.GetChild(i);
+            btn.transform.localScale = Vector3.zero;
+            btn.DOScale(Vector3.one, 0.3f).SetDelay(i * 0.1f);
+        }
+    }
+
+    public void confirmPolynomialFunction()
     {      
         cancelButton.SetActive(false);
         initMenu.SetActive(true);
-        float k1 = float.Parse(GameObject.Find("Canvas/FunMenu/k1").GetComponent<InputField>().text);
-        float k2 = float.Parse(GameObject.Find("Canvas/FunMenu/k2").GetComponent<InputField>().text);
-        float k3 = float.Parse(GameObject.Find("Canvas/FunMenu/k3").GetComponent<InputField>().text);
-        float b = float.Parse(GameObject.Find("Canvas/FunMenu/b").GetComponent<InputField>().text);
+        float k1 = float.Parse(GameObject.Find("Canvas/PolynomialFuncMenu/Formula/k1").GetComponent<InputField>().text);
+        float k2 = float.Parse(GameObject.Find("Canvas/PolynomialFuncMenu/Formula/k2").GetComponent<InputField>().text);
+        float k3 = float.Parse(GameObject.Find("Canvas/PolynomialFuncMenu/Formula/k3").GetComponent<InputField>().text);
+        float b = float.Parse(GameObject.Find("Canvas/PolynomialFuncMenu/Formula/b").GetComponent<InputField>().text);
         float[] args = { k1, k2, k3, b };
         Vector2 domain = new Vector2(-5, 5);
         GameObject function = GameObject.Find("Axis/FunctionRender");
         function.GetComponent<FunctionDisplayScript>().args = args;
         function.GetComponent<FunctionDisplayScript>().domain = domain;
         function.GetComponent<FunctionDisplayScript>().draw = true;
-        functionMenu.SetActive(false);
+        polynomialFuncMenu.SetActive(false);
+    }
+
+    public void confirmExponentialFunction()
+    {
+        cancelButton.SetActive(false);
+        initMenu.SetActive(true);
+        float k1 = float.Parse(GameObject.Find("Canvas/ExponentialFuncMenu/Formula/k1").GetComponent<InputField>().text);
+        int k2 = int.Parse(GameObject.Find("Canvas/ExponentialFuncMenu/Formula/k2").GetComponent<InputField>().text);
+        float[] args = new float[k2 + 1];
+        args[0] = k1;
+        for(int i = 1; i < args.Length; i++)
+        {
+            args[i] = 0;
+        }
+        Vector2 domain = new Vector2(-5, 5);
+        GameObject function = GameObject.Find("Axis/FunctionRender");
+        function.GetComponent<FunctionDisplayScript>().args = args;
+        function.GetComponent<FunctionDisplayScript>().domain = domain;
+        function.GetComponent<FunctionDisplayScript>().draw = true;
+        exponentialFuncMenu.SetActive(false);
+    }
+
+    public void drawCancel()
+    {
+        cancelButton.SetActive(false);
+        initMenu.SetActive(true);
+        funcMenu.SetActive(false);
+        GameObject function = GameObject.Find("Axis/FunctionRender");
+        function.GetComponent<FunctionDisplayScript>().drawCancel = true;
     }
 
     public void selectModel()
@@ -98,7 +157,8 @@ public class UIScript : MonoBehaviour {
         mainMenu.SetActive(false);
         initMenu.SetActive(true);
         cancelButton.SetActive(false);
-        functionMenu.SetActive(false);
+        exponentialFuncMenu.SetActive(false);
+        polynomialFuncMenu.SetActive(false);
         int cnt = initMenu.transform.childCount;
         for (int i = 0; i < cnt; i++)
         {

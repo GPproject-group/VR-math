@@ -8,11 +8,13 @@ public class FunctionDisplayScript : MonoBehaviour {
     public bool draw;
     private int pointcnt;
     private LineRenderer lr;
+    public bool drawCancel;
 	// Use this for initialization
 	void Start () {
         draw = false;
         pointcnt = 0;
         lr = this.GetComponent<LineRenderer>();
+        drawCancel = false;
 	}
 	
 	// Update is called once per frame
@@ -33,6 +35,11 @@ public class FunctionDisplayScript : MonoBehaviour {
             }
             pointcnt = 0;
             draw = false;
+        }
+        if (drawCancel)
+        {
+            lr.positionCount = 0;
+            drawCancel = false;
         }
 	}
 }
