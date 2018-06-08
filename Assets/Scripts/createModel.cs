@@ -8,11 +8,13 @@ public class createModel : MonoBehaviour {
     public Dictionary<string, Vector3[]> showPoint = new Dictionary<string, Vector3[]>(); 
     private MeshFilter filter;
     private Mesh mesh;
+    private SphereCollider sphereCol;
+    public Material mat;
     int num;
 
     // Use this for initialization
     void Start () {
-
+        createCube(3);
     }
 	
 	// Update is called once per frame
@@ -32,7 +34,7 @@ public class createModel : MonoBehaviour {
     public void createTriangle()
     {
         num = showPoint.Count;
-        string objname = "Triangle-" + num;
+        string objname = "Triangle" + num;
         GameObject newTriangle = new GameObject(objname);
         newTriangle.AddComponent<MeshFilter>();
         newTriangle.AddComponent<MeshRenderer>();
@@ -40,12 +42,13 @@ public class createModel : MonoBehaviour {
         filter = newTriangle.GetComponent<MeshFilter>();
         mesh = new Mesh();
         filter.mesh = mesh;
+        newTriangle.GetComponent<MeshRenderer>().material = mat;
         // can't access Camera.current
         //newCone.transform.position = Camera.current.transform.position + Camera.current.transform.forward * 5.0f;
         Vector3[] vertices = new Vector3[3 * 2]; // 0..n-1: top, n..2n-1: bottom
         Vector3[] normals = new Vector3[3 * 2];
         Vector2[] uvs = new Vector2[3 * 2];
-        Vector3[] Points = new Vector3[3 * 2];
+        Vector3[] Points = new Vector3[3];
         int[] tris;
         int i;
 
@@ -57,16 +60,16 @@ public class createModel : MonoBehaviour {
 
             vertices[i] = new Vector3(3 * angleCos, 3 * angleSin, 0);
             vertices[i + 3] = new Vector3(3 * angleCos, 3 * angleSin, 0);
-            normals[i] = new Vector3(0, 0, 1);
+            normals[i] = new Vector3(0, 0, -1);
             normals[i + 3] = new Vector3(0, 0, 1);
             uvs[i] = new Vector2(1.0f * i / 3, 1);
             uvs[i + 3] = new Vector2(1.0f * i / 3, 0);
 
             Points[i] = new Vector3(3 * angleCos, 3 * angleSin, 0);
         }
-        Points[3] = (vertices[0] + vertices[1]) / 2.0f;
+        /*Points[3] = (vertices[0] + vertices[1]) / 2.0f;
         Points[4] = (vertices[2] + vertices[1]) / 2.0f;
-        Points[5] = (vertices[0] + vertices[2]) / 2.0f;
+        Points[5] = (vertices[0] + vertices[2]) / 2.0f;*/
 
         mesh.vertices = vertices;
         mesh.normals = normals;
@@ -77,14 +80,28 @@ public class createModel : MonoBehaviour {
         int cnt = 0;
         tris = new int[3 * 2];
         tris[cnt++] = 0;
-        tris[cnt++] = 1;
-        tris[cnt++] = 2;
         tris[cnt++] = 2;
         tris[cnt++] = 1;
-        tris[cnt++] = 0;
+        tris[cnt++] = 3;
+        tris[cnt++] = 4;
+        tris[cnt++] = 5;
         mesh.triangles = tris;
 
         showPoint.Add(objname, Points);
+
+        //定点设置
+        int pointnum;
+        for (pointnum = 0; pointnum < 3; pointnum++)
+        {
+            string pointName = objname + "-Point" + pointnum;
+            GameObject point = new GameObject(pointName);
+            point.transform.parent = newTriangle.transform;
+            point.transform.position = Points[pointnum];
+            point.AddComponent<SphereCollider>();
+            sphereCol = point.GetComponent<SphereCollider>();
+            sphereCol.isTrigger = false;
+            sphereCol.radius = 0.1f;
+        }
     }
     //四边形
     /*
@@ -94,7 +111,7 @@ public class createModel : MonoBehaviour {
     public void createPlane()
     {
         num = showPoint.Count;
-        string objname = "Plane-" + num;
+        string objname = "Plane" + num;
         GameObject newPlane = new GameObject(objname);
         newPlane.AddComponent<MeshFilter>();
         newPlane.AddComponent<MeshRenderer>();
@@ -102,12 +119,13 @@ public class createModel : MonoBehaviour {
         filter = newPlane.GetComponent<MeshFilter>();
         mesh = new Mesh();
         filter.mesh = mesh;
+        newPlane.GetComponent<MeshRenderer>().material = mat;
         // can't access Camera.current
         //newCone.transform.position = Camera.current.transform.position + Camera.current.transform.forward * 5.0f;
         Vector3[] vertices = new Vector3[4 * 2]; // 0..n-1: top, n..2n-1: bottom
         Vector3[] normals = new Vector3[4 * 2];
         Vector2[] uvs = new Vector2[4 * 2];
-        Vector3[] Points = new Vector3[4 * 2];
+        Vector3[] Points = new Vector3[4];
         int[] tris;
         int i;
 
@@ -119,17 +137,17 @@ public class createModel : MonoBehaviour {
 
             vertices[i] = new Vector3(4 * angleCos, 4 * angleSin, 0);
             vertices[i + 4] = new Vector3(4 * angleCos, 4 * angleSin, 0);
-            normals[i] = new Vector3(0, 0, 1);
+            normals[i] = new Vector3(0, 0, -1);
             normals[i + 4] = new Vector3(0, 0, 1);
             uvs[i] = new Vector2(1.0f * i / 4, 1);
             uvs[i + 4] = new Vector2(1.0f * i / 4, 0);
 
             Points[i] = new Vector3(4 * angleCos, 4 * angleSin, 0);
         }
-        Points[4] = (vertices[0] + vertices[1]) / 2.0f;
+        /*Points[4] = (vertices[0] + vertices[1]) / 2.0f;
         Points[5] = (vertices[1] + vertices[2]) / 2.0f;
         Points[6] = (vertices[2] + vertices[3]) / 2.0f;
-        Points[7] = (vertices[3] + vertices[0]) / 2.0f;
+        Points[7] = (vertices[3] + vertices[0]) / 2.0f;*/
         mesh.vertices = vertices;
         mesh.normals = normals;
         mesh.uv = uvs;
@@ -157,6 +175,20 @@ public class createModel : MonoBehaviour {
         mesh.triangles = tris;
 
         showPoint.Add(objname, Points);
+
+        //定点设置
+        int pointnum;
+        for (pointnum = 0; pointnum < 4; pointnum++)
+        {
+            string pointName = objname + "-Point" + pointnum;
+            GameObject point = new GameObject(pointName);
+            point.transform.parent = newPlane.transform;
+            point.transform.position = Points[pointnum];
+            point.AddComponent<SphereCollider>();
+            sphereCol = point.GetComponent<SphereCollider>();
+            sphereCol.isTrigger = false;
+            sphereCol.radius = 0.1f;
+        }
     }
     //圆锥
     /*
@@ -166,7 +198,7 @@ public class createModel : MonoBehaviour {
     public void createCone()
     {
         num = showPoint.Count;
-        string objname = "Cube-" + num;
+        string objname = "Cone" + num;
         GameObject newCone = new GameObject(objname);
         newCone.AddComponent<MeshFilter>();
         newCone.AddComponent<MeshRenderer>();
@@ -174,7 +206,7 @@ public class createModel : MonoBehaviour {
         filter = newCone.GetComponent<MeshFilter>();
         mesh = new Mesh();
         filter.mesh = mesh;
-
+        newCone.GetComponent<MeshRenderer>().material = mat;
 
         float myRadius = 0.5f;
         int myAngleStep = 20;
@@ -232,6 +264,20 @@ public class createModel : MonoBehaviour {
         mesh.RecalculateTangents();
 
         showPoint.Add(objname, Points);
+
+        //定点设置
+        int pointnum;
+        for (pointnum = 0; pointnum < 7; pointnum++)
+        {
+            string pointName = objname + "-Point" + pointnum;
+            GameObject point = new GameObject(pointName);
+            point.transform.parent = newCone.transform;
+            point.transform.position = Points[pointnum];
+            point.AddComponent<SphereCollider>();
+            sphereCol = point.GetComponent<SphereCollider>();
+            sphereCol.isTrigger = false;
+            sphereCol.radius = 0.1f;
+        }
     }
     //棱锥
     /*
@@ -241,14 +287,16 @@ public class createModel : MonoBehaviour {
     public void createPyramid(int numVertices)
     {
         num = showPoint.Count;
-        string objname = "Pyramid-" + num;
-        GameObject newCube = new GameObject(objname);
-        newCube.AddComponent<MeshFilter>();
-        newCube.AddComponent<MeshRenderer>();
-        newCube.name = objname;
-        filter = newCube.GetComponent<MeshFilter>();
+        string objname = "Pyramid" + num;
+        GameObject newPyramid = new GameObject(objname);
+        newPyramid.AddComponent<MeshFilter>();
+        newPyramid.AddComponent<MeshRenderer>();
+        newPyramid.name = objname;
+        filter = newPyramid.GetComponent<MeshFilter>();
         mesh = new Mesh();
         filter.mesh = mesh;
+        newPyramid.GetComponent<MeshRenderer>().material = mat;
+
 
         float radiusTop = 0f;
         float radiusBottom = 1f;
@@ -261,14 +309,14 @@ public class createModel : MonoBehaviour {
         Vector3[] vertices = new Vector3[2 * multiplier * numVertices]; // 0..n-1: top, n..2n-1: bottom
         Vector3[] normals = new Vector3[2 * multiplier * numVertices];
         Vector2[] uvs = new Vector2[2 * multiplier * numVertices];
-        Vector3[] Points = new Vector3[3 * numVertices + 1];
+        Vector3[] Points = new Vector3[numVertices + 1];
         int[] tris;
         float slope = Mathf.Atan((radiusBottom - radiusTop) / length); // (rad difference)/height
         float slopeSin = Mathf.Sin(slope);
         float slopeCos = Mathf.Cos(slope);
         int i;
 
-        Points[3 * numVertices] = new Vector3( 0, 0, 0);
+        Points[numVertices] = new Vector3( 0, 0, 0);
         for (i = 0; i < numVertices; i++)
         {
             float angle = 2 * Mathf.PI * i / numVertices;
@@ -281,7 +329,7 @@ public class createModel : MonoBehaviour {
             vertices[i] = new Vector3(radiusTop * angleCos, radiusTop * angleSin, 0);
             vertices[i + numVertices] = new Vector3(radiusBottom * angleCos, radiusBottom * angleSin, length);
             Points[i] = new Vector3(radiusBottom * angleCos, radiusBottom * angleSin, length);
-            Points[i + numVertices] = new Vector3(radiusBottom * angleCos / 2, radiusBottom * angleSin / 2, length / 2);
+            //Points[i + numVertices] = new Vector3(radiusBottom * angleCos / 2, radiusBottom * angleSin / 2, length / 2);
 
             if (radiusTop == 0)
                 normals[i] = new Vector3(angleHalfCos * slopeCos, angleHalfSin * slopeCos, -slopeSin);
@@ -310,12 +358,13 @@ public class createModel : MonoBehaviour {
                 normals[i + numVertices + offset] = new Vector3(0, 0, 1);
             }
         }
+        /*
         for (i = 0; i < numVertices - 1; i++)
         {
             Points[i + 2 * numVertices] = (vertices[i] + vertices[i + 1] )/ 2;
         }
 
-        Points[3 * numVertices - 1] = (vertices[0] + vertices[numVertices - 1] )/ 2;
+        Points[3 * numVertices - 1] = (vertices[0] + vertices[numVertices - 1] )/ 2;*/
 
         mesh.vertices = vertices;
         mesh.normals = normals;
@@ -412,6 +461,20 @@ public class createModel : MonoBehaviour {
         mesh.triangles = tris;
 
         showPoint.Add(objname, Points);
+
+        //定点设置
+        int pointnum;
+        for (pointnum = 0; pointnum <= numVertices; pointnum++)
+        {
+            string pointName = objname + "-Point" + pointnum;
+            GameObject point = new GameObject(pointName);
+            point.transform.parent = newPyramid.transform;
+            point.transform.position = Points[pointnum];
+            point.AddComponent<SphereCollider>();
+            sphereCol = point.GetComponent<SphereCollider>();
+            sphereCol.isTrigger = false;
+            sphereCol.radius = 0.1f;
+        }
     }
     //棱柱
     /*
@@ -423,7 +486,7 @@ public class createModel : MonoBehaviour {
     public void createCube(int numVertices)
     {
         num = showPoint.Count;
-        string objname = "Cube-" + num;
+        string objname = "Cube" + num;
         GameObject newCube = new GameObject(objname);
         newCube.AddComponent<MeshFilter>();
         newCube.AddComponent<MeshRenderer>();
@@ -431,6 +494,8 @@ public class createModel : MonoBehaviour {
         filter = newCube.GetComponent<MeshFilter>();
         mesh = new Mesh();
         filter.mesh = mesh;
+        newCube.GetComponent<MeshRenderer>().material = mat;
+
 
         float radiusTop = 1f;
         float radiusBottom = 1f;
@@ -443,7 +508,7 @@ public class createModel : MonoBehaviour {
         Vector3[] vertices = new Vector3[2 * multiplier * numVertices]; // 0..n-1: top, n..2n-1: bottom
         Vector3[] normals = new Vector3[2 * multiplier * numVertices];
         Vector2[] uvs = new Vector2[2 * multiplier * numVertices];
-        Vector3[] Points = new Vector3[5 * numVertices];
+        Vector3[] Points = new Vector3[2 * numVertices];
         int[] tris;
         float slope = Mathf.Atan((radiusBottom - radiusTop) / length); // (rad difference)/height
         float slopeSin = Mathf.Sin(slope);
@@ -463,7 +528,7 @@ public class createModel : MonoBehaviour {
             vertices[i + numVertices] = new Vector3(radiusBottom * angleCos, radiusBottom * angleSin, length);
             Points[i] = new Vector3(radiusTop * angleCos, radiusTop * angleSin, 0);
             Points[i + numVertices] = new Vector3(radiusBottom * angleCos, radiusBottom * angleSin, length);
-            Points[i + 2 * numVertices] = new Vector3((radiusBottom + radiusTop)/ 2 * angleCos, (radiusBottom + radiusTop) / 2 * angleSin, length / 2);
+           // Points[i + 2 * numVertices] = new Vector3((radiusBottom + radiusTop)/ 2 * angleCos, (radiusBottom + radiusTop) / 2 * angleSin, length / 2);
 
             if (radiusTop == 0)
                 normals[i] = new Vector3(angleHalfCos * slopeCos, angleHalfSin * slopeCos, -slopeSin);
@@ -492,6 +557,7 @@ public class createModel : MonoBehaviour {
                 normals[i + numVertices + offset] = new Vector3(0, 0, 1);
             }
         }
+        /*
         for (i = 0; i < numVertices - 1; i++)
         {
             Points[i + 3 * numVertices] = (vertices[i] + vertices[i + 1]) / 2;
@@ -499,7 +565,7 @@ public class createModel : MonoBehaviour {
         }
 
         Points[4 * numVertices - 1] = (vertices[0] + vertices[numVertices - 1]) / 2;
-        Points[5 * numVertices - 1] = (vertices[numVertices] + vertices[2 * numVertices - 1]) / 2;
+        Points[5 * numVertices - 1] = (vertices[numVertices] + vertices[2 * numVertices - 1]) / 2;*/
 
         mesh.vertices = vertices;
         mesh.normals = normals;
@@ -596,6 +662,20 @@ public class createModel : MonoBehaviour {
         mesh.triangles = tris;
 
         showPoint.Add(objname, Points);
+
+        //定点设置
+        int pointnum;
+        for (pointnum = 0; pointnum < numVertices * 2; pointnum++)
+        {
+            string pointName = objname + "-Point" + pointnum;
+            GameObject point = new GameObject(pointName);
+            point.transform.parent = newCube.transform;
+            point.transform.position = Points[pointnum];
+            point.AddComponent<SphereCollider>();
+            sphereCol = point.GetComponent<SphereCollider>();
+            sphereCol.isTrigger = false;
+            sphereCol.radius = 0.1f;
+        }
     }
     //圆柱
     /*
@@ -605,7 +685,7 @@ public class createModel : MonoBehaviour {
     public void createCylinder()
     {
         num = showPoint.Count;
-        string objname = "Cylinder-" + num;
+        string objname = "Cylinder" + num;
         GameObject newCylinder = new GameObject(objname);
         newCylinder.AddComponent<MeshFilter>();
         newCylinder.AddComponent<MeshRenderer>();
@@ -613,6 +693,8 @@ public class createModel : MonoBehaviour {
         filter = newCylinder.GetComponent<MeshFilter>();
         mesh = new Mesh();
         filter.mesh = mesh;
+        newCylinder.GetComponent<MeshRenderer>().material = mat;
+
 
         int numVertices = 20;
         float radiusTop = 1f;
@@ -777,6 +859,20 @@ public class createModel : MonoBehaviour {
         mesh.triangles = tris;
 
         showPoint.Add(objname, Points);
+
+        //定点设置
+        int pointnum;
+        for (pointnum = 0; pointnum < 8; pointnum++)
+        {
+            string pointName = objname + "-Point" + pointnum;
+            GameObject point = new GameObject(pointName);
+            point.transform.parent = newCylinder.transform;
+            point.transform.position = Points[pointnum];
+            point.AddComponent<SphereCollider>();
+            sphereCol = point.GetComponent<SphereCollider>();
+            sphereCol.isTrigger = false;
+            sphereCol.radius = 0.1f;
+        }
     }
 
     //球体
@@ -784,7 +880,6 @@ public class createModel : MonoBehaviour {
         创造球体的语句：DrawSphere();
         point有1个，为原点
     */
-    public Material mat;
     private static Vector3[] directions = {
         Vector3.left,
         Vector3.back,
@@ -800,7 +895,7 @@ public class createModel : MonoBehaviour {
             subdivisions = 4;
         }
         num = showPoint.Count;
-        string objname = "Sphere-" + num;
+        string objname = "Sphere" + num;
         GameObject newSphere = new GameObject(objname);
         newSphere.AddComponent<MeshFilter>();
         newSphere.AddComponent<MeshRenderer>();
@@ -809,7 +904,7 @@ public class createModel : MonoBehaviour {
         mesh = new Mesh();
         filter.mesh = mesh;
 
-        gameObject.GetComponent<MeshRenderer>().material = mat;
+        newSphere.GetComponent<MeshRenderer>().material = mat;
         mesh.Clear();
 
         int resolution = 1 << subdivisions;
@@ -835,6 +930,17 @@ public class createModel : MonoBehaviour {
         mesh.normals = normals;
 
         showPoint.Add(objname, Points);
+
+        //定点设置
+        string pointName = objname + "-Point1";
+        GameObject point = new GameObject(pointName);
+        point.transform.parent = newSphere.transform;
+        point.transform.position = Points[0];
+        point.AddComponent<SphereCollider>();
+        sphereCol = point.GetComponent<SphereCollider>();
+        sphereCol.isTrigger = false;
+        sphereCol.radius = 0.1f;
+
     }
     private static void CreateOctahedron(Vector3[] vertices, int[] triangles, int resolution)
     {
