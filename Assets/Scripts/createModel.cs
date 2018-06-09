@@ -14,7 +14,7 @@ public class createModel : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        createCube(3);
+        //createCube(3);
     }
 	
 	// Update is called once per frame

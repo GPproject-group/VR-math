@@ -12,6 +12,9 @@ public class UIScript : MonoBehaviour {
 	public GameObject polynomialFuncMenu;
     public GameObject exponentialFuncMenu;
     public GameObject cancelButton;
+	public GameObject cubesMenu;
+	public GameObject pyramidMenu;
+	public GameObject keyboard;
 	// Use this for initialization
 	void Start () {
 		
@@ -22,6 +25,11 @@ public class UIScript : MonoBehaviour {
 		
 	}
 
+
+	/* 
+	 * show menu part
+	 * show submenus or inputs of every button
+	 */
     public void showMainMenu()
     {
         initMenu.SetActive(false);
@@ -91,6 +99,25 @@ public class UIScript : MonoBehaviour {
         }
     }
 
+	public void showCubesMenu()
+	{
+		modelMenu.SetActive (false);
+		cubesMenu.SetActive (true);
+		cancelButton.SetActive (true);
+	}
+	public void showPyramidsMemu()
+	{
+		modelMenu.SetActive (false);
+		pyramidMenu.SetActive (true);
+		cancelButton.SetActive (true);
+	}
+
+
+
+	/* 
+	 * confirm part
+	 * confirm the input of keyboard and input field
+	 */
     public void confirmPolynomialFunction()
     {      
         cancelButton.SetActive(false);
@@ -106,6 +133,7 @@ public class UIScript : MonoBehaviour {
         function.GetComponent<FunctionDisplayScript>().domain = domain;
         function.GetComponent<FunctionDisplayScript>().draw = true;
         polynomialFuncMenu.SetActive(false);
+		keyboard.SetActive (false);
     }
 
     public void confirmExponentialFunction()
@@ -126,7 +154,31 @@ public class UIScript : MonoBehaviour {
         function.GetComponent<FunctionDisplayScript>().domain = domain;
         function.GetComponent<FunctionDisplayScript>().draw = true;
         exponentialFuncMenu.SetActive(false);
+		keyboard.SetActive (false);
     }
+
+	public void confirmCubeModel()
+	{
+		cancelButton.SetActive(false);
+		initMenu.SetActive(true);
+		int edge = int.Parse (GameObject.Find ("Canvas/CubesMenu/Formula/edge").GetComponent<InputField> ().text);
+		GameObject model = GameObject.Find ("Axis/ModelCreater");
+		model.GetComponent<createModel> ().createCube (edge);
+		cubesMenu.SetActive (false);
+		keyboard.SetActive (false);
+	}
+
+	public void confirmPyramidModel()
+	{
+		cancelButton.SetActive(false);
+		initMenu.SetActive(true);
+		int edge = int.Parse (GameObject.Find ("Canvas/PyramidsMenu/Formula/edge").GetComponent<InputField> ().text);
+		GameObject model = GameObject.Find ("Axis/ModelCreater");
+		model.GetComponent<createModel> ().createPyramid (edge);
+		pyramidMenu.SetActive (false);
+		keyboard.SetActive (false);
+
+	}
 
     public void drawCancel()
     {
