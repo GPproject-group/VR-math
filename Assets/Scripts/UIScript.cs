@@ -209,8 +209,11 @@ public class UIScript : MonoBehaviour {
         mainMenu.SetActive(false);
         initMenu.SetActive(true);
         cancelButton.SetActive(false);
+        funcMenu.SetActive(false);
         exponentialFuncMenu.SetActive(false);
         polynomialFuncMenu.SetActive(false);
+        cubesMenu.SetActive(false);
+        pyramidMenu.SetActive(false);
         int cnt = initMenu.transform.childCount;
         for (int i = 0; i < cnt; i++)
         {
