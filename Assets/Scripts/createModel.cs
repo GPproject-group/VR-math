@@ -19,7 +19,12 @@ public class createModel : MonoBehaviour {
     private VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction vrtkSwap;
     private ChangeMaterialScript chaMatScr;
     private VRTK.Examples.SelectObjectScript selObjSrc;
-    
+
+    public Material matSelect;
+    public Material matDefault;
+    GameObject controRight = GameObject.Find("RightController");
+
+
 
     // Use this for initialization
     void Start () {
@@ -102,6 +107,7 @@ public class createModel : MonoBehaviour {
 
         //定点设置
         int pointnum;
+        //GameObject controRight = GameObject.Find("RightController");
         for (pointnum = 0; pointnum < 3; pointnum++)
         {
             string pointName = objname + "-Point" + pointnum;
@@ -120,6 +126,10 @@ public class createModel : MonoBehaviour {
             selObjSrc.holdButtonToGrab = false;
             selObjSrc.isUsable = true;
             selObjSrc.pointerActivatesUseAction = true;
+            
+            selObjSrc.controllerRight = controRight;
+            chaMatScr.selectedMaterial = matSelect;
+            chaMatScr.defaultMaterial = matDefault;
         }
 
         //增加tag
@@ -239,6 +249,10 @@ public class createModel : MonoBehaviour {
             selObjSrc.holdButtonToGrab = false;
             selObjSrc.isUsable = true;
             selObjSrc.pointerActivatesUseAction = true;
+
+            selObjSrc.controllerRight = controRight;
+            chaMatScr.selectedMaterial = matSelect;
+            chaMatScr.defaultMaterial = matDefault;
         }
 
         //增加tag
@@ -359,6 +373,10 @@ public class createModel : MonoBehaviour {
             selObjSrc.holdButtonToGrab = false;
             selObjSrc.isUsable = true;
             selObjSrc.pointerActivatesUseAction = true;
+
+            selObjSrc.controllerRight = controRight;
+            chaMatScr.selectedMaterial = matSelect;
+            chaMatScr.defaultMaterial = matDefault;
         }
 
         //增加tag
@@ -587,6 +605,10 @@ public class createModel : MonoBehaviour {
             selObjSrc.holdButtonToGrab = false;
             selObjSrc.isUsable = true;
             selObjSrc.pointerActivatesUseAction = true;
+
+            selObjSrc.controllerRight = controRight;
+            chaMatScr.selectedMaterial = matSelect;
+            chaMatScr.defaultMaterial = matDefault;
         }
 
         //增加tag
@@ -819,6 +841,10 @@ public class createModel : MonoBehaviour {
             selObjSrc.holdButtonToGrab = false;
             selObjSrc.isUsable = true;
             selObjSrc.pointerActivatesUseAction = true;
+
+            selObjSrc.controllerRight = controRight;
+            chaMatScr.selectedMaterial = matSelect;
+            chaMatScr.defaultMaterial = matDefault;
         }
 
         //增加tag
@@ -1047,6 +1073,10 @@ public class createModel : MonoBehaviour {
             selObjSrc.holdButtonToGrab = false;
             selObjSrc.isUsable = true;
             selObjSrc.pointerActivatesUseAction = true;
+
+            selObjSrc.controllerRight = controRight;
+            chaMatScr.selectedMaterial = matSelect;
+            chaMatScr.defaultMaterial = matDefault;
         }
 
         //增加tag
@@ -1145,6 +1175,10 @@ public class createModel : MonoBehaviour {
         selObjSrc.holdButtonToGrab = false;
         selObjSrc.isUsable = true;
         selObjSrc.pointerActivatesUseAction = true;
+
+        selObjSrc.controllerRight = controRight;
+        chaMatScr.selectedMaterial = matSelect;
+        chaMatScr.defaultMaterial = matDefault;
 
         //增加tag
         newSphere.tag = "model";
