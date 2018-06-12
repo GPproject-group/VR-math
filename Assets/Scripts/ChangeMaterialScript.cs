@@ -12,13 +12,13 @@ public class ChangeMaterialScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (this.tag.Equals("selected"))
+/*        if (this.tag.Equals("selected"))
         {
             this.GetComponent<Renderer>().material = selectedMaterial;
         }
-        if (this.tag.Equals("model"))
+        if (this.tag.Equals("vertex"))
         {
             this.GetComponent<Renderer>().material = defaultMaterial;
-        }
+        }*/
     }
 }

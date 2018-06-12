@@ -5,43 +5,10 @@ using UnityEngine;
 public enum LLRELATION { VERTICAL,PARALLEL,INTERSECT,VERANDINT,NONE,ERROR};
 public enum LPRELATION { VERTICAL,PARALLEL,IN,INTERSECT,ERROR};
 
-public class MathCalculateScript : MonoBehaviour {
-    public bool flag;
-    public float angle;
-	// Use this for initialization
-	void Start () {
-        flag = false;
-    }
-	
-	// Update is called once per frame
-	void Update () {
-        if (flag)
-        {
-            Vector3[] plane1 = { new Vector3(0, 0, 0), new Vector3(0, 0, 1), new Vector3(0, 1, 0) };
-            Vector3[] plane2 = { new Vector3(0, 0, 0), new Vector3(0, 1, 0), new Vector3(-1, 0, -2) };
-            angle = ppAngle(plane1, plane2);
-            flag = false;
-        }
-        
-	}
-
-    //connect two point to a line
-    public void connect(Vector3 p1,Vector3 p2)
-    {
-        LineRenderer lr = gameObject.AddComponent<LineRenderer>();
-        lr.startWidth = 0.05f;
-        lr.endWidth = 0.05f;
-        //        lr.material = new Material(Shader.Find("Assets/Red"));
-        UnityEngine.Object matObj = UnityEditor.AssetDatabase.LoadMainAssetAtPath("Assets/Red");
-        Material mat = matObj as Material;
-        lr.material = mat;
-        lr.positionCount = 2;
-        lr.SetPosition(0, p1);
-        lr.SetPosition(1, p2);
-    }
+public class MathCalculate {
 
     //calculate length of a segment
-    public float segmentLength(Vector3[] line)
+    public static float segmentLength(Vector3[] line)
     {
         if (line.Length != 2)
         {
@@ -53,7 +20,7 @@ public class MathCalculateScript : MonoBehaviour {
     }
 
     //calculate relation of two lines
-    public LLRELATION llRelation(Vector3[] line1, Vector3[] line2)
+    public static LLRELATION llRelation(Vector3[] line1, Vector3[] line2)
     {
         if (line1.Length != 2 || line2.Length != 2)
         {
@@ -100,7 +67,7 @@ public class MathCalculateScript : MonoBehaviour {
     }
 
     //calculate relation of a line and a plane
-    public LPRELATION lpRelation(Vector3[] line,Vector3[] plane)
+    public static LPRELATION lpRelation(Vector3[] line,Vector3[] plane)
     {
         if (line.Length != 2 || plane.Length != 3)
         {
@@ -139,7 +106,7 @@ public class MathCalculateScript : MonoBehaviour {
     }
 
     //calculate angle of two lines(0 - 90)
-    public float llAngle(Vector3[] line1,Vector3[] line2)
+    public static float llAngle(Vector3[] line1,Vector3[] line2)
     {
         if (line1.Length != 2 || line2.Length != 2)
         {
@@ -154,7 +121,7 @@ public class MathCalculateScript : MonoBehaviour {
     }
 
     //calculate angle of two planes(0 - 90)
-    public float ppAngle(Vector3[] plane1, Vector3[] plane2)
+    public static float ppAngle(Vector3[] plane1, Vector3[] plane2)
     {
         if (plane1.Length != 3 || plane2.Length != 3)
         {
@@ -171,7 +138,7 @@ public class MathCalculateScript : MonoBehaviour {
     }
 
     //calculate angle of a line and a plane(0 - 90)
-    public float lpAngle(Vector3[] line, Vector3[] plane)
+    public static float lpAngle(Vector3[] line, Vector3[] plane)
     {
         if (line.Length != 2 || plane.Length != 3)
         {
@@ -182,8 +149,48 @@ public class MathCalculateScript : MonoBehaviour {
         return Mathf.Abs(90 - angle);
     }
 
-    private Vector3 planeNormal(Vector3[] plane)
+    private static Vector3 planeNormal(Vector3[] plane)
     {
         return Vector3.Cross(plane[0] - plane[1], plane[0] - plane[2]);
+    }
+
+    public static string toString(LLRELATION relation)
+    {
+        switch (relation)
+        {
+            case LLRELATION.VERTICAL:
+                return "vertical";
+            case LLRELATION.VERANDINT:
+                return "vertical and intersect";
+            case LLRELATION.PARALLEL:
+                return "parallel";
+            case LLRELATION.NONE:
+                return "none";
+            case LLRELATION.INTERSECT:
+                return "intersect";
+            case LLRELATION.ERROR:
+                return "error";
+            default:
+                return "error";
+        }
+    }
+
+    public static string toString(LPRELATION relation)
+    {
+        switch (relation)
+        {
+            case LPRELATION.VERTICAL:
+                return "vertical";
+            case LPRELATION.IN:
+                return "line in plane";
+            case LPRELATION.PARALLEL:
+                return "parallel";
+            case LPRELATION.INTERSECT:
+                return "intersect";
+            case LPRELATION.ERROR:
+                return "error";
+            default:
+                return "error";
+        }
     }
 }

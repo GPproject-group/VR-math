@@ -15,7 +15,7 @@
         {
             base.StartUsing(usingObject);
             flag = true;
-            if (this.tag.Equals("model"))
+            if (this.tag.Equals("vertex"))
             {
                 accuTime = 0;
             }
@@ -38,12 +38,14 @@
         protected override void Update()
         {
             base.Update();
-            if (this.tag.Equals("model")&&flag)
+            if (this.tag.Equals("vertex")&&flag)
             {
                 accuTime += Time.deltaTime;
                 if (accuTime >= 2)
                 {
                     this.tag = "selected";
+                    GlobalData.selectedVertex.Add(this.gameObject);
+                    
                     flag = false;
                 }
             }
@@ -52,7 +54,8 @@
                 accuTime += Time.deltaTime;
                 if (accuTime >= 2)
                 {
-                    this.tag = "model";
+                    this.tag = "vertex";
+                    GlobalData.selectedVertex.Remove(this.gameObject);
                     flag = false;
                 }
             }

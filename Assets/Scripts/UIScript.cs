@@ -15,6 +15,8 @@ public class UIScript : MonoBehaviour {
 	public GameObject cubesMenu;
 	public GameObject pyramidMenu;
 	public GameObject keyboard;
+    public GameObject operationMenu;
+    public GameObject infoMenu;
 	// Use this for initialization
 	void Start () {
 		
@@ -71,6 +73,21 @@ public class UIScript : MonoBehaviour {
             btn.DOScale(Vector3.one, 0.3f).SetDelay(i * 0.1f);
         }
     }
+
+    public void showOperationMenu()
+    {
+        mainMenu.SetActive(false);
+        operationMenu.SetActive(true);
+        cancelButton.SetActive(true);
+        int cnt = operationMenu.transform.childCount;
+        for (int i = 0; i < cnt; i++)
+        {
+            Transform btn = operationMenu.transform.GetChild(i);
+            btn.transform.localScale = Vector3.zero;
+            btn.DOScale(Vector3.one, 0.3f).SetDelay(i * 0.1f);
+        }
+    }
+
 
     public void showPolynomialFunctionMenu()
 	{
@@ -203,6 +220,102 @@ public class UIScript : MonoBehaviour {
         }
     }
 
+    public void selectLine()
+    {
+        if (GlobalData.selectedVertex.Count == 2)
+        {
+            operationMenu.SetActive(false);
+            cancelButton.SetActive(false);
+            initMenu.SetActive(true);
+            int cnt = initMenu.transform.childCount;
+            for (int i = 0; i < cnt; i++)
+            {
+                Transform btn = initMenu.transform.GetChild(i);
+                btn.transform.localScale = Vector3.zero;
+                btn.DOScale(Vector3.one, 0.3f).SetDelay(i * 0.1f);
+            }
+        }
+        else
+        {
+            operationMenu.SetActive(false);
+            cancelButton.SetActive(false);
+            infoMenu.SetActive(true);
+            GameObject.Find("Canvas/InfoMenu/InfoTex").GetComponent<Text>().text = "You must select two point before connecting to line.";
+        }
+    }
+
+    public void selectPlane()
+    {
+        if (GlobalData.selectedVertex.Count == 3)
+        {
+            operationMenu.SetActive(false);
+            cancelButton.SetActive(false);
+            initMenu.SetActive(true);
+            int cnt = initMenu.transform.childCount;
+            for (int i = 0; i < cnt; i++)
+            {
+                Transform btn = initMenu.transform.GetChild(i);
+                btn.transform.localScale = Vector3.zero;
+                btn.DOScale(Vector3.one, 0.3f).SetDelay(i * 0.1f);
+            }
+        }
+        else
+        {
+            operationMenu.SetActive(false);
+            cancelButton.SetActive(false);
+            infoMenu.SetActive(true);
+            GameObject.Find("Canvas/InfoMenu/InfoTex").GetComponent<Text>().text = "You must select two point before connecting to plane.";
+        }
+    }
+
+    public void selectLength()
+    {
+        operationMenu.SetActive(false);
+        cancelButton.SetActive(false);
+        infoMenu.SetActive(true);
+        if (GlobalData.selectedLine.Count != 1)
+        {
+            GameObject.Find("Canvas/InfoMenu/InfoTex").GetComponent<Text>().text = "You must select a line before calculate its length.";
+        }
+        else
+        {
+            Vector3[] line = GlobalData.selectedLine[0];
+            float len = MathCalculate.segmentLength(line);
+            GameObject.Find("Canvas/InfoMenu/InfoTex").GetComponent<Text>().text = "Length of selected line is " + len.ToString() + ".";
+        }
+    }
+
+    public void selectRelation()
+    {
+        operationMenu.SetActive(false);
+        cancelButton.SetActive(false);
+        infoMenu.SetActive(true);
+        int linecnt = GlobalData.selectedLine.Count;
+        int planecnt = GlobalData.selectedPlane.Count;
+        if (linecnt == 2 && planecnt == 0)
+        {
+            Vector3[] line1 = GlobalData.selectedLine[0];
+            Vector3[] line2 = GlobalData.selectedLine[1];
+            LLRELATION relation = MathCalculate.llRelation(line1,line2);
+            GameObject.Find("Canvas/InfoMenu/InfoTex").GetComponent<Text>().text = "Relation of the two selected lines is : " + MathCalculate.toString(relation) + ".";
+        }
+        else if (linecnt == 1 && planecnt == 1)
+        {
+            Vector3[] line = GlobalData.selectedLine[0];
+            Vector3[] plane = GlobalData.selectedPlane[0];
+            LPRELATION relation = MathCalculate.lpRelation(line, plane);
+            GameObject.Find("Canvas/InfoMenu/InfoTex").GetComponent<Text>().text = "Length of selected line and plane is : " + MathCalculate.toString(relation) + ".";
+        }
+        else if (linecnt == 0 && planecnt == 2)
+        {
+
+        }
+        else
+        {
+            GameObject.Find("Canvas/InfoMenu/InfoTex").GetComponent<Text>().text = "Selection is not correct.";
+        }
+    }
+
     public void cancel()
     {
         modelMenu.SetActive(false);
@@ -214,6 +327,8 @@ public class UIScript : MonoBehaviour {
         polynomialFuncMenu.SetActive(false);
         cubesMenu.SetActive(false);
         pyramidMenu.SetActive(false);
+        infoMenu.SetActive(false);
+        operationMenu.SetActive(false);
         int cnt = initMenu.transform.childCount;
         for (int i = 0; i < cnt; i++)
         {

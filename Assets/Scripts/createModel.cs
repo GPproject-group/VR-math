@@ -22,8 +22,7 @@ public class createModel : MonoBehaviour {
 
     public Material matSelect;
     public Material matDefault;
-    GameObject controRight = GameObject.Find("RightController");
-
+    public GameObject controRight;
 
 
     // Use this for initialization
