@@ -10,7 +10,9 @@ public class createModel : MonoBehaviour {
     private MeshFilter filter;
     private Mesh mesh;
     private SphereCollider sphereCol;
-    public Material mat;
+    private MeshCollider meshCol;
+    private BoxCollider boxCol;
+
     int num;
     //组件们
     private Rigidbody rigid;
@@ -20,6 +22,7 @@ public class createModel : MonoBehaviour {
     private ChangeMaterialScript chaMatScr;
     private VRTK.Examples.SelectObjectScript selObjSrc;
 
+    public Material mat;
     public Material matSelect;
     public Material matDefault;
     public GameObject controRight;
@@ -106,12 +109,14 @@ public class createModel : MonoBehaviour {
 
         //定点设置
         int pointnum;
+        string vertexs = "Triangle" + num + "-vertex";
+        GameObject vertexObj = new GameObject(vertexs);
         //GameObject controRight = GameObject.Find("RightController");
         for (pointnum = 0; pointnum < 3; pointnum++)
         {
             string pointName = objname + "-Point" + pointnum;
             GameObject point = new GameObject(pointName);
-            point.transform.parent = newTriangle.transform;
+            point.transform.parent = vertexObj.transform;
             point.transform.position = Points[pointnum];
             point.AddComponent<SphereCollider>();
             sphereCol = point.GetComponent<SphereCollider>();
@@ -138,12 +143,15 @@ public class createModel : MonoBehaviour {
         newTriangle.AddComponent<VRTK.VRTK_InteractableObject>();
         newTriangle.AddComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
         newTriangle.AddComponent<VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
+        newTriangle.AddComponent<MeshCollider>();
         //更改属性
         rigid = newTriangle.GetComponent<Rigidbody>();
         rigid.useGravity = false;
+        rigid.isKinematic = true;
 
         vrtkTrack = newTriangle.GetComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
         vrtkTrack.precisionGrab = true;
+
         vrtkSwap = newTriangle.GetComponent<VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
 
         vrtkInter = newTriangle.GetComponent<VRTK.VRTK_InteractableObject>();
@@ -152,6 +160,11 @@ public class createModel : MonoBehaviour {
         vrtkInter.holdButtonToUse = false;
         vrtkInter.grabAttachMechanicScript = vrtkTrack;
         vrtkInter.secondaryGrabActionScript = vrtkSwap;
+
+        meshCol = newTriangle.GetComponent<MeshCollider>();
+        meshCol.convex = true;
+        meshCol.sharedMesh = mesh;
+        meshCol.isTrigger = false;
 
     }
     //四边形
@@ -229,11 +242,13 @@ public class createModel : MonoBehaviour {
 
         //定点设置
         int pointnum;
+        string vertexs = "Plane" + num + "-vertex";
+        GameObject vertexObj = new GameObject(vertexs);
         for (pointnum = 0; pointnum < 4; pointnum++)
         {
             string pointName = objname + "-Point" + pointnum;
             GameObject point = new GameObject(pointName);
-            point.transform.parent = newPlane.transform;
+            point.transform.parent = vertexObj.transform;
             point.transform.position = Points[pointnum];
             point.AddComponent<SphereCollider>();
             sphereCol = point.GetComponent<SphereCollider>();
@@ -261,9 +276,11 @@ public class createModel : MonoBehaviour {
         newPlane.AddComponent<VRTK.VRTK_InteractableObject>();
         newPlane.AddComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
         newPlane.AddComponent<VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
+        newPlane.AddComponent<MeshCollider>();
         //更改属性
         rigid = newPlane.GetComponent<Rigidbody>();
         rigid.useGravity = false;
+        rigid.isKinematic = true;
 
         vrtkTrack = newPlane.GetComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
         vrtkTrack.precisionGrab = true;
@@ -275,6 +292,11 @@ public class createModel : MonoBehaviour {
         vrtkInter.holdButtonToUse = false;
         vrtkInter.grabAttachMechanicScript = vrtkTrack;
         vrtkInter.secondaryGrabActionScript = vrtkSwap;
+
+        meshCol = newPlane.GetComponent<MeshCollider>();
+        meshCol.convex = true;
+        meshCol.sharedMesh = mesh;
+        meshCol.isTrigger = false;
     }
     //圆锥
     /*
@@ -353,11 +375,13 @@ public class createModel : MonoBehaviour {
 
         //定点设置
         int pointnum;
+        string vertexs = "Cone" + num + "-vertex";
+        GameObject vertexObj = new GameObject(vertexs);
         for (pointnum = 0; pointnum < 7; pointnum++)
         {
             string pointName = objname + "-Point" + pointnum;
             GameObject point = new GameObject(pointName);
-            point.transform.parent = newCone.transform;
+            point.transform.parent = vertexObj.transform;
             point.transform.position = Points[pointnum];
             point.AddComponent<SphereCollider>();
             sphereCol = point.GetComponent<SphereCollider>();
@@ -385,9 +409,11 @@ public class createModel : MonoBehaviour {
         newCone.AddComponent<VRTK.VRTK_InteractableObject>();
         newCone.AddComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
         newCone.AddComponent<VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
+        newCone.AddComponent<MeshCollider>();
         //更改属性
         rigid = newCone.GetComponent<Rigidbody>();
         rigid.useGravity = false;
+        rigid.isKinematic = true;
 
         vrtkTrack = newCone.GetComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
         vrtkTrack.precisionGrab = true;
@@ -399,6 +425,11 @@ public class createModel : MonoBehaviour {
         vrtkInter.holdButtonToUse = false;
         vrtkInter.grabAttachMechanicScript = vrtkTrack;
         vrtkInter.secondaryGrabActionScript = vrtkSwap;
+
+        meshCol = newCone.GetComponent<MeshCollider>();
+        meshCol.convex = true;
+        meshCol.sharedMesh = mesh;
+        meshCol.isTrigger = false;
     }
     //棱锥
     /*
@@ -585,11 +616,13 @@ public class createModel : MonoBehaviour {
 
         //定点设置
         int pointnum;
+        string vertexs = "Pyramid" + num + "-vertex";
+        GameObject vertexObj = new GameObject(vertexs);
         for (pointnum = 0; pointnum <= numVertices; pointnum++)
         {
             string pointName = objname + "-Point" + pointnum;
             GameObject point = new GameObject(pointName);
-            point.transform.parent = newPyramid.transform;
+            point.transform.parent = vertexObj.transform;
             point.transform.position = Points[pointnum];
             point.AddComponent<SphereCollider>();
             sphereCol = point.GetComponent<SphereCollider>();
@@ -617,9 +650,11 @@ public class createModel : MonoBehaviour {
         newPyramid.AddComponent<VRTK.VRTK_InteractableObject>();
         newPyramid.AddComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
         newPyramid.AddComponent<VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
+        newPyramid.AddComponent<MeshCollider>();
         //更改属性
         rigid = newPyramid.GetComponent<Rigidbody>();
         rigid.useGravity = false;
+        rigid.isKinematic = true;
 
         vrtkTrack = newPyramid.GetComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
         vrtkTrack.precisionGrab = true;
@@ -631,6 +666,11 @@ public class createModel : MonoBehaviour {
         vrtkInter.holdButtonToUse = false;
         vrtkInter.grabAttachMechanicScript = vrtkTrack;
         vrtkInter.secondaryGrabActionScript = vrtkSwap;
+
+        meshCol = newPyramid.GetComponent<MeshCollider>();
+        meshCol.convex = true;
+        meshCol.sharedMesh = mesh;
+        meshCol.isTrigger = false;
     }
     //棱柱
     /*
@@ -821,11 +861,13 @@ public class createModel : MonoBehaviour {
 
         //定点设置
         int pointnum;
+        string vertexs = "Cube" + num + "-vertex";
+        GameObject vertexObj = new GameObject(vertexs);
         for (pointnum = 0; pointnum < numVertices * 2; pointnum++)
         {
             string pointName = objname + "-Point" + pointnum;
             GameObject point = new GameObject(pointName);
-            point.transform.parent = newCube.transform;
+            point.transform.parent = vertexObj.transform;
             point.transform.position = Points[pointnum];
             point.AddComponent<SphereCollider>();
             sphereCol = point.GetComponent<SphereCollider>();
@@ -853,9 +895,11 @@ public class createModel : MonoBehaviour {
         newCube.AddComponent<VRTK.VRTK_InteractableObject>();
         newCube.AddComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
         newCube.AddComponent<VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
+        newCube.AddComponent<MeshCollider>();
         //更改属性
         rigid = newCube.GetComponent<Rigidbody>();
         rigid.useGravity = false;
+        rigid.isKinematic = true;
 
         vrtkTrack = newCube.GetComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
         vrtkTrack.precisionGrab = true;
@@ -867,6 +911,11 @@ public class createModel : MonoBehaviour {
         vrtkInter.holdButtonToUse = false;
         vrtkInter.grabAttachMechanicScript = vrtkTrack;
         vrtkInter.secondaryGrabActionScript = vrtkSwap;
+
+        meshCol = newCube.GetComponent<MeshCollider>();
+        meshCol.convex = true;
+        meshCol.sharedMesh = mesh;
+        meshCol.isTrigger = false;
     }
     //圆柱
     /*
@@ -1053,11 +1102,13 @@ public class createModel : MonoBehaviour {
 
         //定点设置
         int pointnum;
+        string vertexs = "Cylinder" + num + "-vertex";
+        GameObject vertexObj = new GameObject(vertexs);
         for (pointnum = 0; pointnum < 8; pointnum++)
         {
             string pointName = objname + "-Point" + pointnum;
             GameObject point = new GameObject(pointName);
-            point.transform.parent = newCylinder.transform;
+            point.transform.parent = vertexObj.transform;
             point.transform.position = Points[pointnum];
             point.AddComponent<SphereCollider>();
             sphereCol = point.GetComponent<SphereCollider>();
@@ -1085,9 +1136,11 @@ public class createModel : MonoBehaviour {
         newCylinder.AddComponent<VRTK.VRTK_InteractableObject>();
         newCylinder.AddComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
         newCylinder.AddComponent<VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
+        newCylinder.AddComponent<MeshCollider>();
         //更改属性
         rigid = newCylinder.GetComponent<Rigidbody>();
         rigid.useGravity = false;
+        rigid.isKinematic = true;
 
         vrtkTrack = newCylinder.GetComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
         vrtkTrack.precisionGrab = true;
@@ -1099,6 +1152,12 @@ public class createModel : MonoBehaviour {
         vrtkInter.holdButtonToUse = false;
         vrtkInter.grabAttachMechanicScript = vrtkTrack;
         vrtkInter.secondaryGrabActionScript = vrtkSwap;
+        
+        meshCol = newCylinder.GetComponent<MeshCollider>();
+        meshCol.convex = true;
+        meshCol.sharedMesh = mesh;
+        meshCol.isTrigger = false;
+
     }
 
     //球体
@@ -1158,9 +1217,11 @@ public class createModel : MonoBehaviour {
         showPoint.Add(objname, Points);
 
         //定点设置
+        string vertexs = "Sphere" + num + "-vertex";
+        GameObject vertexObj = new GameObject(vertexs);
         string pointName = objname + "-Point1";
         GameObject point = new GameObject(pointName);
-        point.transform.parent = newSphere.transform;
+        point.transform.parent = vertexObj.transform;
         point.transform.position = Points[0];
         point.AddComponent<SphereCollider>();
         sphereCol = point.GetComponent<SphereCollider>();
@@ -1186,9 +1247,11 @@ public class createModel : MonoBehaviour {
         newSphere.AddComponent<VRTK.VRTK_InteractableObject>();
         newSphere.AddComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
         newSphere.AddComponent<VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
+        newSphere.AddComponent<SphereCollider>();
         //更改属性
         rigid = newSphere.GetComponent<Rigidbody>();
         rigid.useGravity = false;
+        rigid.isKinematic = true;
 
         vrtkTrack = newSphere.GetComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
         vrtkTrack.precisionGrab = true;
@@ -1201,6 +1264,10 @@ public class createModel : MonoBehaviour {
         vrtkInter.grabAttachMechanicScript = vrtkTrack;
         vrtkInter.secondaryGrabActionScript = vrtkSwap;
 
+        sphereCol = newSphere.GetComponent<SphereCollider>();
+        sphereCol.center = newSphere.transform.position;
+        sphereCol.radius = 1;
+        
     }
     private static void CreateOctahedron(Vector3[] vertices, int[] triangles, int resolution)
     {
