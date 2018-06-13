@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum LLRELATION { VERTICAL,PARALLEL,INTERSECT,VERANDINT,NONE,ERROR};
 public enum LPRELATION { VERTICAL,PARALLEL,IN,INTERSECT,ERROR};
+public enum PPRELATION { VERTICAL,PARALLEL,SAME,INTERSECT,ERROR};
 
 public class MathCalculate {
 
@@ -105,6 +106,38 @@ public class MathCalculate {
         }
     }
 
+    //calculate relation of two planes
+    public static PPRELATION ppRelation(Vector3[] plane1, Vector3[] plane2)
+    {
+        if (plane1.Length != 3 || plane2.Length != 3)
+        {
+            return PPRELATION.ERROR;
+        }
+        Vector3 normal1 = planeNormal(plane1);
+        Vector3 normal2 = planeNormal(plane2);
+        if (Vector3.Dot(normal1, normal2) == 0)
+        {
+            return PPRELATION.VERTICAL;
+        }
+        else if (Vector3.Cross(normal1, normal2).magnitude == 0)
+        {
+            Vector3[] line1 = { plane1[0], plane1[1] };
+            Vector3[] line2 = { plane1[1], plane1[2] };
+            if (lpRelation(line1, plane2) == LPRELATION.IN && lpRelation(line2, plane2) == LPRELATION.IN)
+            {
+                return PPRELATION.SAME;
+            }
+            else
+            {
+                return PPRELATION.PARALLEL;
+            }
+        }
+        else
+        {
+            return PPRELATION.INTERSECT;
+        }
+    }
+
     //calculate angle of two lines(0 - 90)
     public static float llAngle(Vector3[] line1,Vector3[] line2)
     {
@@ -188,6 +221,25 @@ public class MathCalculate {
             case LPRELATION.INTERSECT:
                 return "intersect";
             case LPRELATION.ERROR:
+                return "error";
+            default:
+                return "error";
+        }
+    }
+
+    public static string toString(PPRELATION relation)
+    {
+        switch (relation)
+        {
+            case PPRELATION.VERTICAL:
+                return "vertical";
+            case PPRELATION.SAME:
+                return "the same plane";
+            case PPRELATION.PARALLEL:
+                return "parallel";
+            case PPRELATION.INTERSECT:
+                return "intersect";
+            case PPRELATION.ERROR:
                 return "error";
             default:
                 return "error";

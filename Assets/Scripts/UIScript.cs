@@ -304,11 +304,14 @@ public class UIScript : MonoBehaviour {
             Vector3[] line = GlobalData.selectedLine[0];
             Vector3[] plane = GlobalData.selectedPlane[0];
             LPRELATION relation = MathCalculate.lpRelation(line, plane);
-            GameObject.Find("Canvas/InfoMenu/InfoTex").GetComponent<Text>().text = "Length of selected line and plane is : " + MathCalculate.toString(relation) + ".";
+            GameObject.Find("Canvas/InfoMenu/InfoTex").GetComponent<Text>().text = "Relation of selected line and plane is : " + MathCalculate.toString(relation) + ".";
         }
         else if (linecnt == 0 && planecnt == 2)
         {
-
+            Vector3[] plane1 = GlobalData.selectedPlane[0];
+            Vector3[] plane2 = GlobalData.selectedPlane[1];
+            PPRELATION relation = MathCalculate.ppRelation(plane1, plane2);
+            GameObject.Find("Canvas/InfoMenu/InfoTex").GetComponent<Text>().text = "Relation of two selected planes is : " + MathCalculate.toString(relation) + ".";
         }
         else
         {
