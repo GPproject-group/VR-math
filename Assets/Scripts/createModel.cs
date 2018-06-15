@@ -5,23 +5,21 @@ using UnityEngine;
 
 public class createModel : MonoBehaviour {
 
-
-    public Dictionary<string, Vector3[]> showPoint = new Dictionary<string, Vector3[]>(); 
+    //可能用到的公用列表
+    public Dictionary<string, Vector3[]> showPoint = new Dictionary<string, Vector3[]>();
+    public static List<GameObject> modelList = new List<GameObject>();
+    int num;
+    //model的组件
     private MeshFilter filter;
     private Mesh mesh;
     private SphereCollider sphereCol;
     private MeshCollider meshCol;
-    private BoxCollider boxCol;
-
-    int num;
-    //组件们
     private Rigidbody rigid;
-    private VRTK.VRTK_InteractableObject vrtkInter;
-    private VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach vrtkTrack;
-    private VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction vrtkSwap;
+    private VRTK.Examples.TouchToPlane vrtkTouch;
+    //vertex的组件
     private ChangeMaterialScript chaMatScr;
     private VRTK.Examples.SelectObjectScript selObjSrc;
-
+    //两者的公用组件
     public Material mat;
     public Material matSelect;
     public Material matDefault;
@@ -111,61 +109,58 @@ public class createModel : MonoBehaviour {
         int pointnum;
         string vertexs = "Triangle" + num + "-vertex";
         GameObject vertexObj = new GameObject(vertexs);
-        //GameObject controRight = GameObject.Find("RightController");
+        vertexObj.transform.position = newTriangle.transform.position;
         for (pointnum = 0; pointnum < 3; pointnum++)
         {
             string pointName = objname + "-Point" + pointnum;
             GameObject point = new GameObject(pointName);
             point.transform.parent = vertexObj.transform;
             point.transform.position = Points[pointnum];
+            point.tag = "vertex";
+
             point.AddComponent<SphereCollider>();
+            point.AddComponent<ChangeMaterialScript>();
+            point.AddComponent<VRTK.Examples.SelectObjectScript>();
+            
             sphereCol = point.GetComponent<SphereCollider>();
             sphereCol.isTrigger = false;
             sphereCol.radius = 0.1f;
-            point.tag = "vertex";
-            point.AddComponent<ChangeMaterialScript>();
-            point.AddComponent<VRTK.Examples.SelectObjectScript>();
+
             chaMatScr = point.GetComponent<ChangeMaterialScript>();
+            chaMatScr.selectedMaterial = matSelect;
+            chaMatScr.defaultMaterial = matDefault;
+
             selObjSrc = point.GetComponent<VRTK.Examples.SelectObjectScript>();
             selObjSrc.holdButtonToGrab = false;
             selObjSrc.isUsable = true;
             selObjSrc.pointerActivatesUseAction = true;
-            
             selObjSrc.controllerRight = controRight;
-            chaMatScr.selectedMaterial = matSelect;
-            chaMatScr.defaultMaterial = matDefault;
         }
+        vertexObj.AddComponent<changeVertexsPoi>();
+        vertexObj.GetComponent<changeVertexsPoi>().modelObj = newTriangle;
 
         //增加tag
         newTriangle.tag = "model";
+        modelList.Add(newTriangle);
         //增加组件
         newTriangle.AddComponent<Rigidbody>();
-        newTriangle.AddComponent<VRTK.VRTK_InteractableObject>();
-        newTriangle.AddComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
-        newTriangle.AddComponent<VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
         newTriangle.AddComponent<MeshCollider>();
+        newTriangle.AddComponent<VRTK.Examples.TouchToPlane>();
         //更改属性
         rigid = newTriangle.GetComponent<Rigidbody>();
         rigid.useGravity = false;
         rigid.isKinematic = true;
-
-        vrtkTrack = newTriangle.GetComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
-        vrtkTrack.precisionGrab = true;
-
-        vrtkSwap = newTriangle.GetComponent<VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
-
-        vrtkInter = newTriangle.GetComponent<VRTK.VRTK_InteractableObject>();
-        vrtkInter.isGrabbable = true;
-        vrtkInter.touchHighlightColor = new Color32(255,176,176,0);
-        vrtkInter.holdButtonToUse = false;
-        vrtkInter.grabAttachMechanicScript = vrtkTrack;
-        vrtkInter.secondaryGrabActionScript = vrtkSwap;
-
+       
         meshCol = newTriangle.GetComponent<MeshCollider>();
         meshCol.convex = true;
         meshCol.sharedMesh = mesh;
         meshCol.isTrigger = false;
 
+        vrtkTouch = newTriangle.GetComponent<VRTK.Examples.TouchToPlane>();
+        vrtkTouch.isGrabbable = true;
+        vrtkTouch.isUsable = true;
+        vrtkTouch.pointerActivatesUseAction = true;
+        vrtkTouch.controllerRight = controRight;
     }
     //四边形
     /*
@@ -244,59 +239,59 @@ public class createModel : MonoBehaviour {
         int pointnum;
         string vertexs = "Plane" + num + "-vertex";
         GameObject vertexObj = new GameObject(vertexs);
+        vertexObj.transform.position = newPlane.transform.position;
         for (pointnum = 0; pointnum < 4; pointnum++)
         {
             string pointName = objname + "-Point" + pointnum;
             GameObject point = new GameObject(pointName);
             point.transform.parent = vertexObj.transform;
             point.transform.position = Points[pointnum];
+
+            point.tag = "vertex";
             point.AddComponent<SphereCollider>();
+            point.AddComponent<ChangeMaterialScript>();
+            point.AddComponent<VRTK.Examples.SelectObjectScript>();
+
             sphereCol = point.GetComponent<SphereCollider>();
             sphereCol.isTrigger = false;
             sphereCol.radius = 0.1f;
 
-            point.tag = "vertex";
-            point.AddComponent<ChangeMaterialScript>();
-            point.AddComponent<VRTK.Examples.SelectObjectScript>();
             chaMatScr = point.GetComponent<ChangeMaterialScript>();
+            chaMatScr.selectedMaterial = matSelect;
+            chaMatScr.defaultMaterial = matDefault;
+
             selObjSrc = point.GetComponent<VRTK.Examples.SelectObjectScript>();
             selObjSrc.holdButtonToGrab = false;
             selObjSrc.isUsable = true;
             selObjSrc.pointerActivatesUseAction = true;
-
             selObjSrc.controllerRight = controRight;
-            chaMatScr.selectedMaterial = matSelect;
-            chaMatScr.defaultMaterial = matDefault;
         }
+        vertexObj.AddComponent<changeVertexsPoi>();
+        vertexObj.GetComponent<changeVertexsPoi>().modelObj = newPlane;
 
         //增加tag
         newPlane.tag = "model";
+        modelList.Add(newPlane);
         //增加组件
         newPlane.AddComponent<Rigidbody>();
-        newPlane.AddComponent<VRTK.VRTK_InteractableObject>();
-        newPlane.AddComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
-        newPlane.AddComponent<VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
         newPlane.AddComponent<MeshCollider>();
+        newPlane.AddComponent<VRTK.Examples.TouchToPlane>();
         //更改属性
         rigid = newPlane.GetComponent<Rigidbody>();
         rigid.useGravity = false;
         rigid.isKinematic = true;
-
-        vrtkTrack = newPlane.GetComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
-        vrtkTrack.precisionGrab = true;
-        vrtkSwap = newPlane.GetComponent<VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
-
-        vrtkInter = newPlane.GetComponent<VRTK.VRTK_InteractableObject>();
-        vrtkInter.isGrabbable = true;
-        vrtkInter.touchHighlightColor = new Color32(255, 176, 176, 0);
-        vrtkInter.holdButtonToUse = false;
-        vrtkInter.grabAttachMechanicScript = vrtkTrack;
-        vrtkInter.secondaryGrabActionScript = vrtkSwap;
+       
 
         meshCol = newPlane.GetComponent<MeshCollider>();
         meshCol.convex = true;
         meshCol.sharedMesh = mesh;
         meshCol.isTrigger = false;
+
+        vrtkTouch = newPlane.GetComponent<VRTK.Examples.TouchToPlane>();
+        vrtkTouch.isGrabbable = true;
+        vrtkTouch.isUsable = true;
+        vrtkTouch.pointerActivatesUseAction = true;
+        vrtkTouch.controllerRight = controRight;
     }
     //圆锥
     /*
@@ -377,59 +372,59 @@ public class createModel : MonoBehaviour {
         int pointnum;
         string vertexs = "Cone" + num + "-vertex";
         GameObject vertexObj = new GameObject(vertexs);
+        vertexObj.transform.position = newCone.transform.position;
         for (pointnum = 0; pointnum < 7; pointnum++)
         {
             string pointName = objname + "-Point" + pointnum;
             GameObject point = new GameObject(pointName);
             point.transform.parent = vertexObj.transform;
             point.transform.position = Points[pointnum];
+
+            point.tag = "vertex";
             point.AddComponent<SphereCollider>();
+            point.AddComponent<ChangeMaterialScript>();
+            point.AddComponent<VRTK.Examples.SelectObjectScript>();
+
             sphereCol = point.GetComponent<SphereCollider>();
             sphereCol.isTrigger = false;
             sphereCol.radius = 0.1f;
 
-            point.tag = "vertex";
-            point.AddComponent<ChangeMaterialScript>();
-            point.AddComponent<VRTK.Examples.SelectObjectScript>();
-            chaMatScr = point.GetComponent<ChangeMaterialScript>();
+
             selObjSrc = point.GetComponent<VRTK.Examples.SelectObjectScript>();
             selObjSrc.holdButtonToGrab = false;
             selObjSrc.isUsable = true;
             selObjSrc.pointerActivatesUseAction = true;
-
             selObjSrc.controllerRight = controRight;
+            
+            chaMatScr = point.GetComponent<ChangeMaterialScript>();
             chaMatScr.selectedMaterial = matSelect;
             chaMatScr.defaultMaterial = matDefault;
         }
+        vertexObj.AddComponent<changeVertexsPoi>();
+        vertexObj.GetComponent<changeVertexsPoi>().modelObj = newCone;
 
         //增加tag
         newCone.tag = "model";
+        modelList.Add(newCone);
         //增加组件
         newCone.AddComponent<Rigidbody>();
-        newCone.AddComponent<VRTK.VRTK_InteractableObject>();
-        newCone.AddComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
-        newCone.AddComponent<VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
         newCone.AddComponent<MeshCollider>();
+        newCone.AddComponent<VRTK.Examples.TouchToPlane>();
         //更改属性
         rigid = newCone.GetComponent<Rigidbody>();
         rigid.useGravity = false;
         rigid.isKinematic = true;
 
-        vrtkTrack = newCone.GetComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
-        vrtkTrack.precisionGrab = true;
-        vrtkSwap = newCone.GetComponent<VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
-
-        vrtkInter = newCone.GetComponent<VRTK.VRTK_InteractableObject>();
-        vrtkInter.isGrabbable = true;
-        vrtkInter.touchHighlightColor = new Color32(255, 176, 176, 0);
-        vrtkInter.holdButtonToUse = false;
-        vrtkInter.grabAttachMechanicScript = vrtkTrack;
-        vrtkInter.secondaryGrabActionScript = vrtkSwap;
-
         meshCol = newCone.GetComponent<MeshCollider>();
         meshCol.convex = true;
         meshCol.sharedMesh = mesh;
         meshCol.isTrigger = false;
+
+        vrtkTouch = newCone.GetComponent<VRTK.Examples.TouchToPlane>();
+        vrtkTouch.isGrabbable = true;
+        vrtkTouch.isUsable = true;
+        vrtkTouch.pointerActivatesUseAction = true;
+        vrtkTouch.controllerRight = controRight;
     }
     //棱锥
     /*
@@ -618,59 +613,58 @@ public class createModel : MonoBehaviour {
         int pointnum;
         string vertexs = "Pyramid" + num + "-vertex";
         GameObject vertexObj = new GameObject(vertexs);
+        vertexObj.transform.position = newPyramid.transform.position;
         for (pointnum = 0; pointnum <= numVertices; pointnum++)
         {
             string pointName = objname + "-Point" + pointnum;
             GameObject point = new GameObject(pointName);
             point.transform.parent = vertexObj.transform;
             point.transform.position = Points[pointnum];
+
+            point.tag = "vertex";
             point.AddComponent<SphereCollider>();
+            point.AddComponent<ChangeMaterialScript>();
+            point.AddComponent<VRTK.Examples.SelectObjectScript>();
+
             sphereCol = point.GetComponent<SphereCollider>();
             sphereCol.isTrigger = false;
             sphereCol.radius = 0.1f;
 
-            point.tag = "vertex";
-            point.AddComponent<ChangeMaterialScript>();
-            point.AddComponent<VRTK.Examples.SelectObjectScript>();
             chaMatScr = point.GetComponent<ChangeMaterialScript>();
+            chaMatScr.selectedMaterial = matSelect;
+            chaMatScr.defaultMaterial = matDefault;
+
             selObjSrc = point.GetComponent<VRTK.Examples.SelectObjectScript>();
             selObjSrc.holdButtonToGrab = false;
             selObjSrc.isUsable = true;
             selObjSrc.pointerActivatesUseAction = true;
-
             selObjSrc.controllerRight = controRight;
-            chaMatScr.selectedMaterial = matSelect;
-            chaMatScr.defaultMaterial = matDefault;
         }
+        vertexObj.AddComponent<changeVertexsPoi>();
+        vertexObj.GetComponent<changeVertexsPoi>().modelObj = newPyramid;
 
         //增加tag
         newPyramid.tag = "model";
+        modelList.Add(newPyramid);
         //增加组件
         newPyramid.AddComponent<Rigidbody>();
-        newPyramid.AddComponent<VRTK.VRTK_InteractableObject>();
-        newPyramid.AddComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
-        newPyramid.AddComponent<VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
         newPyramid.AddComponent<MeshCollider>();
+        newPyramid.AddComponent<VRTK.Examples.TouchToPlane>();
         //更改属性
         rigid = newPyramid.GetComponent<Rigidbody>();
         rigid.useGravity = false;
         rigid.isKinematic = true;
 
-        vrtkTrack = newPyramid.GetComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
-        vrtkTrack.precisionGrab = true;
-        vrtkSwap = newPyramid.GetComponent<VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
-
-        vrtkInter = newPyramid.GetComponent<VRTK.VRTK_InteractableObject>();
-        vrtkInter.isGrabbable = true;
-        vrtkInter.touchHighlightColor = new Color32(255, 176, 176, 0);
-        vrtkInter.holdButtonToUse = false;
-        vrtkInter.grabAttachMechanicScript = vrtkTrack;
-        vrtkInter.secondaryGrabActionScript = vrtkSwap;
-
         meshCol = newPyramid.GetComponent<MeshCollider>();
         meshCol.convex = true;
         meshCol.sharedMesh = mesh;
         meshCol.isTrigger = false;
+
+        vrtkTouch = newPyramid.GetComponent<VRTK.Examples.TouchToPlane>();
+        vrtkTouch.isGrabbable = true;
+        vrtkTouch.isUsable = true;
+        vrtkTouch.pointerActivatesUseAction = true;
+        vrtkTouch.controllerRight = controRight;
     }
     //棱柱
     /*
@@ -863,59 +857,59 @@ public class createModel : MonoBehaviour {
         int pointnum;
         string vertexs = "Cube" + num + "-vertex";
         GameObject vertexObj = new GameObject(vertexs);
+        vertexObj.transform.position = newCube.transform.position;
         for (pointnum = 0; pointnum < numVertices * 2; pointnum++)
         {
             string pointName = objname + "-Point" + pointnum;
             GameObject point = new GameObject(pointName);
             point.transform.parent = vertexObj.transform;
             point.transform.position = Points[pointnum];
+
+            point.tag = "vertex";
             point.AddComponent<SphereCollider>();
+            point.AddComponent<ChangeMaterialScript>();
+            point.AddComponent<VRTK.Examples.SelectObjectScript>();
+
             sphereCol = point.GetComponent<SphereCollider>();
             sphereCol.isTrigger = false;
             sphereCol.radius = 0.1f;
 
-            point.tag = "vertex";
-            point.AddComponent<ChangeMaterialScript>();
-            point.AddComponent<VRTK.Examples.SelectObjectScript>();
             chaMatScr = point.GetComponent<ChangeMaterialScript>();
+            chaMatScr.selectedMaterial = matSelect;
+            chaMatScr.defaultMaterial = matDefault;
+
             selObjSrc = point.GetComponent<VRTK.Examples.SelectObjectScript>();
             selObjSrc.holdButtonToGrab = false;
             selObjSrc.isUsable = true;
             selObjSrc.pointerActivatesUseAction = true;
-
             selObjSrc.controllerRight = controRight;
-            chaMatScr.selectedMaterial = matSelect;
-            chaMatScr.defaultMaterial = matDefault;
+
         }
+        vertexObj.AddComponent<changeVertexsPoi>();
+        vertexObj.GetComponent<changeVertexsPoi>().modelObj = newCube;
 
         //增加tag
         newCube.tag = "model";
+        modelList.Add(newCube);
         //增加组件
         newCube.AddComponent<Rigidbody>();
-        newCube.AddComponent<VRTK.VRTK_InteractableObject>();
-        newCube.AddComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
-        newCube.AddComponent<VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
         newCube.AddComponent<MeshCollider>();
+        newCube.AddComponent<VRTK.Examples.TouchToPlane>();
         //更改属性
         rigid = newCube.GetComponent<Rigidbody>();
         rigid.useGravity = false;
         rigid.isKinematic = true;
 
-        vrtkTrack = newCube.GetComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
-        vrtkTrack.precisionGrab = true;
-        vrtkSwap = newCube.GetComponent<VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
-
-        vrtkInter = newCube.GetComponent<VRTK.VRTK_InteractableObject>();
-        vrtkInter.isGrabbable = true;
-        vrtkInter.touchHighlightColor = new Color32(255, 176, 176, 0);
-        vrtkInter.holdButtonToUse = false;
-        vrtkInter.grabAttachMechanicScript = vrtkTrack;
-        vrtkInter.secondaryGrabActionScript = vrtkSwap;
-
         meshCol = newCube.GetComponent<MeshCollider>();
         meshCol.convex = true;
         meshCol.sharedMesh = mesh;
         meshCol.isTrigger = false;
+
+        vrtkTouch = newCube.GetComponent<VRTK.Examples.TouchToPlane>();
+        vrtkTouch.isGrabbable = true;
+        vrtkTouch.isUsable = true;
+        vrtkTouch.pointerActivatesUseAction = true;
+        vrtkTouch.controllerRight = controRight;
     }
     //圆柱
     /*
@@ -1104,60 +1098,59 @@ public class createModel : MonoBehaviour {
         int pointnum;
         string vertexs = "Cylinder" + num + "-vertex";
         GameObject vertexObj = new GameObject(vertexs);
+        vertexObj.transform.position = newCylinder.transform.position;
         for (pointnum = 0; pointnum < 8; pointnum++)
         {
             string pointName = objname + "-Point" + pointnum;
             GameObject point = new GameObject(pointName);
             point.transform.parent = vertexObj.transform;
             point.transform.position = Points[pointnum];
+
+            point.tag = "vertex";
             point.AddComponent<SphereCollider>();
+            point.AddComponent<ChangeMaterialScript>();
+            point.AddComponent<VRTK.Examples.SelectObjectScript>();
+
             sphereCol = point.GetComponent<SphereCollider>();
             sphereCol.isTrigger = false;
             sphereCol.radius = 0.1f;
 
-            point.tag = "vertex";
-            point.AddComponent<ChangeMaterialScript>();
-            point.AddComponent<VRTK.Examples.SelectObjectScript>();
             chaMatScr = point.GetComponent<ChangeMaterialScript>();
+            chaMatScr.selectedMaterial = matSelect;
+            chaMatScr.defaultMaterial = matDefault;
+
             selObjSrc = point.GetComponent<VRTK.Examples.SelectObjectScript>();
             selObjSrc.holdButtonToGrab = false;
             selObjSrc.isUsable = true;
             selObjSrc.pointerActivatesUseAction = true;
-
             selObjSrc.controllerRight = controRight;
-            chaMatScr.selectedMaterial = matSelect;
-            chaMatScr.defaultMaterial = matDefault;
+
         }
+        vertexObj.AddComponent<changeVertexsPoi>();
+        vertexObj.GetComponent<changeVertexsPoi>().modelObj = newCylinder;
 
         //增加tag
         newCylinder.tag = "model";
+        modelList.Add(newCylinder);
         //增加组件
         newCylinder.AddComponent<Rigidbody>();
-        newCylinder.AddComponent<VRTK.VRTK_InteractableObject>();
-        newCylinder.AddComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
-        newCylinder.AddComponent<VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
         newCylinder.AddComponent<MeshCollider>();
+        newCylinder.AddComponent<VRTK.Examples.TouchToPlane>();
         //更改属性
         rigid = newCylinder.GetComponent<Rigidbody>();
         rigid.useGravity = false;
         rigid.isKinematic = true;
 
-        vrtkTrack = newCylinder.GetComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
-        vrtkTrack.precisionGrab = true;
-        vrtkSwap = newCylinder.GetComponent<VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
-
-        vrtkInter = newCylinder.GetComponent<VRTK.VRTK_InteractableObject>();
-        vrtkInter.isGrabbable = true;
-        vrtkInter.touchHighlightColor = new Color32(255, 176, 176, 0);
-        vrtkInter.holdButtonToUse = false;
-        vrtkInter.grabAttachMechanicScript = vrtkTrack;
-        vrtkInter.secondaryGrabActionScript = vrtkSwap;
-        
         meshCol = newCylinder.GetComponent<MeshCollider>();
         meshCol.convex = true;
         meshCol.sharedMesh = mesh;
         meshCol.isTrigger = false;
 
+        vrtkTouch = newCylinder.GetComponent<VRTK.Examples.TouchToPlane>();
+        vrtkTouch.isGrabbable = true;
+        vrtkTouch.isUsable = true;
+        vrtkTouch.pointerActivatesUseAction = true;
+        vrtkTouch.controllerRight = controRight;
     }
 
     //球体
@@ -1219,55 +1212,54 @@ public class createModel : MonoBehaviour {
         //定点设置
         string vertexs = "Sphere" + num + "-vertex";
         GameObject vertexObj = new GameObject(vertexs);
+        vertexObj.transform.position = newSphere.transform.position;
         string pointName = objname + "-Point1";
         GameObject point = new GameObject(pointName);
         point.transform.parent = vertexObj.transform;
         point.transform.position = Points[0];
+
+        point.tag = "vertex";
         point.AddComponent<SphereCollider>();
+        point.AddComponent<ChangeMaterialScript>();
+        point.AddComponent<VRTK.Examples.SelectObjectScript>();
+
         sphereCol = point.GetComponent<SphereCollider>();
         sphereCol.isTrigger = false;
         sphereCol.radius = 0.1f;
-        point.tag = "vertex";
-        point.AddComponent<ChangeMaterialScript>();
-        point.AddComponent<VRTK.Examples.SelectObjectScript>();
+
         chaMatScr = point.GetComponent<ChangeMaterialScript>();
+        chaMatScr.selectedMaterial = matSelect;
+        chaMatScr.defaultMaterial = matDefault;
+
         selObjSrc = point.GetComponent<VRTK.Examples.SelectObjectScript>();
         selObjSrc.holdButtonToGrab = false;
         selObjSrc.isUsable = true;
         selObjSrc.pointerActivatesUseAction = true;
-
         selObjSrc.controllerRight = controRight;
-        chaMatScr.selectedMaterial = matSelect;
-        chaMatScr.defaultMaterial = matDefault;
 
+        vertexObj.AddComponent<changeVertexsPoi>();
+        vertexObj.GetComponent<changeVertexsPoi>().modelObj = newSphere;
         //增加tag
         newSphere.tag = "model";
+        modelList.Add(newSphere);
         //增加组件
         newSphere.AddComponent<Rigidbody>();
-        newSphere.AddComponent<VRTK.VRTK_InteractableObject>();
-        newSphere.AddComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
-        newSphere.AddComponent<VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
         newSphere.AddComponent<SphereCollider>();
+        newSphere.AddComponent<VRTK.Examples.TouchToPlane>();
         //更改属性
         rigid = newSphere.GetComponent<Rigidbody>();
         rigid.useGravity = false;
         rigid.isKinematic = true;
 
-        vrtkTrack = newSphere.GetComponent<VRTK.GrabAttachMechanics.VRTK_TrackObjectGrabAttach>();
-        vrtkTrack.precisionGrab = true;
-        vrtkSwap = newSphere.GetComponent<VRTK.SecondaryControllerGrabActions.VRTK_SwapControllerGrabAction>();
-
-        vrtkInter = newSphere.GetComponent<VRTK.VRTK_InteractableObject>();
-        vrtkInter.isGrabbable = true;
-        vrtkInter.touchHighlightColor = new Color32(255, 176, 176, 0);
-        vrtkInter.holdButtonToUse = false;
-        vrtkInter.grabAttachMechanicScript = vrtkTrack;
-        vrtkInter.secondaryGrabActionScript = vrtkSwap;
-
         sphereCol = newSphere.GetComponent<SphereCollider>();
         sphereCol.center = newSphere.transform.position;
         sphereCol.radius = 1;
         
+        vrtkTouch = newSphere.GetComponent<VRTK.Examples.TouchToPlane>();
+        vrtkTouch.isGrabbable = true;
+        vrtkTouch.isUsable = true;
+        vrtkTouch.pointerActivatesUseAction = true;
+        vrtkTouch.controllerRight = controRight;
     }
     private static void CreateOctahedron(Vector3[] vertices, int[] triangles, int resolution)
     {
