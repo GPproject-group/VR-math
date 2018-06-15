@@ -8,25 +8,32 @@
         public GameObject controllerRight;
 
         private bool m_IsClearSamePoint = false;
-        private Vector3 w_TouchBeganPos;
-        private Vector3 w_TouchEndPos;
+        public Vector3 w_TouchBeganPos;
+        public Vector3 w_TouchEndPos;
 
         private Vector3 m_ClipPlaneNormal;
         private Vector3 m_ClipPlanePoint;
 
         private bool clip;
         private bool isbegin;
+        public bool flag;
+        private GameObject vertexObj;
+
+        //x0x+y0y+z0z-x0x1-y0y1-z0z1=0      n=(x0,y0,z0)    p=(x1,y1,z1)
 
         public override void StartUsing(VRTK_InteractUse usingObject)
         {
             base.StartUsing(usingObject);
-            RaycastHit hit;
-            if (Physics.Raycast(controllerRight.transform.position, controllerRight.transform.forward, out hit, 100.0F))
+            if (flag)
             {
-                if (!isbegin)
+                RaycastHit hit;
+                if (Physics.Raycast(controllerRight.transform.position, controllerRight.transform.forward, out hit, 100.0F))
                 {
-                    w_TouchBeganPos = hit.point;
-                    isbegin = true;
+                    if (!isbegin)
+                    {
+                        w_TouchBeganPos = hit.point;
+                        isbegin = true;
+                    }
                 }
             }
         }
@@ -34,35 +41,46 @@
         public override void StopUsing(VRTK_InteractUse usingObject)
         {
             base.StopUsing(usingObject);
-            isbegin = false;
-            clip = true;
+            if (flag)
+            {        
+                isbegin = false;
+                clip = true;
+            }
         }
 
         protected void Start()
         {
-            clip = false;
-            isbegin = false;
+            if (flag)
+            {
+                clip = false;
+                isbegin = false;
+                vertexObj = GameObject.Find(this.name + "-vertex");
+            }
         }
 
         protected override void Update()
         {
             base.Update();
-            RaycastHit hit;
-            if (Physics.Raycast(controllerRight.transform.position, controllerRight.transform.forward, out hit, 100.0F))
+            if (flag)
             {
-                w_TouchEndPos = hit.point;
-            }
+                RaycastHit hit;
+                if (Physics.Raycast(controllerRight.transform.position, controllerRight.transform.forward, out hit, 100.0F))
+                {
+                    w_TouchEndPos = hit.point;
+                }
 
-            if (clip)
-            {
-                Vector3 touchEndPoint_local = transform.worldToLocalMatrix.MultiplyPoint(w_TouchEndPos);
-                Vector3 touchBeganPoint_local = transform.worldToLocalMatrix.MultiplyPoint(w_TouchBeganPos);
-                Vector3 controllerPoint_local = transform.worldToLocalMatrix.MultiplyPoint(controllerRight.transform.position);
-                m_ClipPlaneNormal = Vector3.Cross(touchBeganPoint_local - controllerPoint_local, touchBeganPoint_local - touchEndPoint_local).normalized;
-                m_ClipPlanePoint = touchBeganPoint_local;
-                ClipMesh();
+                if (clip)
+                {
+                    Vector3 touchEndPoint_local = transform.worldToLocalMatrix.MultiplyPoint(w_TouchEndPos);
+                    Vector3 touchBeganPoint_local = transform.worldToLocalMatrix.MultiplyPoint(w_TouchBeganPos);
+                    Vector3 controllerPoint_local = transform.worldToLocalMatrix.MultiplyPoint(controllerRight.transform.position);
+                    m_ClipPlaneNormal = Vector3.Cross(touchBeganPoint_local - controllerPoint_local, touchBeganPoint_local - touchEndPoint_local).normalized;
+                    m_ClipPlanePoint = touchBeganPoint_local;
+                    ClipMesh();
+                    flag = false;
+                }
+                clip = false;
             }
-            clip = false;
         }
 
         void ClipMesh()
@@ -525,7 +543,10 @@
             //分割模型
             if (triangles2.Count > 0)
             {
-                GameObject newModel = new GameObject("New Model");
+                string newname = this.name+"(clip)";
+                GameObject newModel = new GameObject(newname);
+                GameObject newModelVertex = new GameObject(newname + "-vertex");
+                
                 MeshFilter meshFilter = newModel.AddComponent<MeshFilter>();
                 meshFilter.mesh.vertices = mf.mesh.vertices;
                 meshFilter.mesh.triangles = triangles2.ToArray();
@@ -537,7 +558,23 @@
                 newModel.transform.localPosition = transform.localPosition;
                 newModel.transform.localRotation = transform.localRotation;
                 newModel.transform.localScale = transform.localScale;
-                newModel.AddComponent<TouchToPlane>();
+                Rigidbody rb = newModel.AddComponent<Rigidbody>();
+                rb.useGravity = false;
+                TouchToPlane ttp = newModel.AddComponent<TouchToPlane>();
+
+                
+                Vector3 v = meshFilter.mesh.vertices[0];
+                float res = Vector3.Dot(m_ClipPlaneNormal, v) - Vector3.Dot(m_ClipPlaneNormal, m_ClipPlanePoint);
+                foreach (Transform childTransform in vertexObj.transform)
+                {
+                    GameObject child = childTransform.gameObject;
+                    Vector3 clipPos = transform.worldToLocalMatrix.MultiplyPoint(child.transform.position);
+                    float childRes= Vector3.Dot(m_ClipPlaneNormal, clipPos) - Vector3.Dot(m_ClipPlaneNormal, m_ClipPlanePoint);
+                    if (childRes * res > 0)
+                    {
+                        child.transform.parent = newModelVertex.transform;
+                    }
+                }
             }
         }
 
