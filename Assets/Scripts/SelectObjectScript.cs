@@ -45,14 +45,8 @@
                 {
                     this.tag = "selected";
                     GlobalData.selectedVertex.Add(this.gameObject);
+                    
                     flag = false;
-                    foreach (Transform child in this.transform)
-                    {
-                        Destroy(child.gameObject);
-                    }
-                    GameObject effect = (GameObject)Instantiate(Resources.Load("Prefabs/MagicSphereGreen"));
-                    effect.transform.parent = this.transform;
-                    effect.transform.localPosition = Vector3.zero;
                 }
             }
             else if (this.tag.Equals("selected")&&flag)
@@ -63,13 +57,6 @@
                     this.tag = "vertex";
                     GlobalData.selectedVertex.Remove(this.gameObject);
                     flag = false;
-                    foreach (Transform child in this.transform)
-                    {
-                        Destroy(child.gameObject);
-                    }
-                    GameObject effect = (GameObject)Instantiate(Resources.Load("Prefabs/MagicSphereBlue"));
-                    effect.transform.parent = this.transform;
-                    effect.transform.localPosition = Vector3.zero;
                 }
             }
         }
