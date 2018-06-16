@@ -4,12 +4,13 @@ using UnityEngine;
 using System.IO;
 using UnityEngine.UI;
 
-public class importModel : MonoBehaviour {
+public class ImportModel : MonoBehaviour {
 
 	public string path = "Assets/Resources/models";
 	public List<string> files;
 	public GameObject importBtn;
 	public GameObject parent;
+    public GameObject controllerRight;
 
 	// Use this for initialization
 	void Start () {
@@ -41,8 +42,24 @@ public class importModel : MonoBehaviour {
 			Debug.Log (btn.transform.Find ("Text").GetComponent<Text> ().text);
 			btn.onClick.AddListener (delegate() {
 				GameObject obj = OBJLoader.LoadOBJFile (path + '/' + filename);
+                GameObject vertexobj = new GameObject(obj.name + "-vertex");
 				obj.transform.position = new Vector3 (0, 0, 0);
-			});
+                obj.tag = "model";
+                createModel.modelList.Add(obj);
+                Rigidbody rb = obj.AddComponent<Rigidbody>();
+                MeshCollider mc = obj.AddComponent<MeshCollider>();
+                VRTK.Examples.TouchToPlane ttp = obj.AddComponent<VRTK.Examples.TouchToPlane>();
+
+                rb = obj.GetComponent<Rigidbody>();
+                rb.useGravity = false;
+                rb.isKinematic = true;
+
+                ttp.isGrabbable = true;
+                ttp.isUsable = true;
+                ttp.pointerActivatesUseAction = true;
+                ttp.controllerRight = controllerRight;
+
+            });
 
 			btnObj.transform.localScale = new Vector3(1,1,1);
 			btnObj.transform.localPosition = new Vector3 (x, y, 0);
