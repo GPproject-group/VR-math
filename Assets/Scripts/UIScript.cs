@@ -331,7 +331,10 @@ public class UIScript : MonoBehaviour {
             btn.transform.localScale = Vector3.zero;
             btn.DOScale(Vector3.one, 0.3f).SetDelay(i * 0.1f);
         }
- //dosomething
+        foreach(GameObject model in createModel.modelList)
+        {
+            model.GetComponent<VRTK.Examples.TouchToPlane>().flag = true;
+        }
     }
 
     public void cancel()

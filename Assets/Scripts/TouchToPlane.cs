@@ -50,11 +50,12 @@
 
         protected void Start()
         {
+            vertexObj = GameObject.Find(this.name + "-vertex");
             if (flag)
             {
                 clip = false;
                 isbegin = false;
-                vertexObj = GameObject.Find(this.name + "-vertex");
+                
             }
         }
 
@@ -77,7 +78,10 @@
                     m_ClipPlaneNormal = Vector3.Cross(touchBeganPoint_local - controllerPoint_local, touchBeganPoint_local - touchEndPoint_local).normalized;
                     m_ClipPlanePoint = touchBeganPoint_local;
                     ClipMesh();
-                    flag = false;
+                    foreach(GameObject model in createModel.modelList)
+                    {
+                        model.GetComponent<TouchToPlane>().flag = false;
+                    }
                 }
                 clip = false;
             }
@@ -559,22 +563,45 @@
                 newModel.transform.localRotation = transform.localRotation;
                 newModel.transform.localScale = transform.localScale;
                 Rigidbody rb = newModel.AddComponent<Rigidbody>();
-                rb.useGravity = false;
+                MeshCollider mc = newModel.AddComponent<MeshCollider>();
                 TouchToPlane ttp = newModel.AddComponent<TouchToPlane>();
+                rb.useGravity = false;
+                rb.isKinematic = true;
+                mc.convex = true;
+                mc.sharedMesh = meshFilter.mesh;
+                mc.isTrigger = false;
+                ttp.isGrabbable = true;
+                ttp.isUsable = true;
+                ttp.pointerActivatesUseAction = true;
+                ttp.controllerRight = controllerRight;
 
-                
-                Vector3 v = meshFilter.mesh.vertices[0];
-                float res = Vector3.Dot(m_ClipPlaneNormal, v) - Vector3.Dot(m_ClipPlaneNormal, m_ClipPlanePoint);
-                foreach (Transform childTransform in vertexObj.transform)
+                changeVertexsPoi cv = newModelVertex.AddComponent<changeVertexsPoi>();
+                cv.modelObj = newModel;
+
+                Vector3 w_planeNormal = Vector3.Cross(w_TouchBeganPos - w_TouchEndPos, w_TouchBeganPos - controllerRight.transform.position);
+                Vector3 w_planePoint = w_TouchBeganPos;
+
+
+                Vector3 l_v = meshFilter.mesh.vertices[0];    //local pos
+                Vector3 w_v = l_v + this.transform.position;    //world pos
+                float res = Vector3.Dot(w_planeNormal, w_v) - Vector3.Dot(w_planeNormal, w_planePoint);
+                bool done = false;
+                while (!done)
                 {
-                    GameObject child = childTransform.gameObject;
-                    Vector3 clipPos = transform.worldToLocalMatrix.MultiplyPoint(child.transform.position);
-                    float childRes= Vector3.Dot(m_ClipPlaneNormal, clipPos) - Vector3.Dot(m_ClipPlaneNormal, m_ClipPlanePoint);
-                    if (childRes * res > 0)
+                    done = true;
+                    foreach (Transform childTransform in vertexObj.transform)
                     {
-                        child.transform.parent = newModelVertex.transform;
+                        GameObject vertex = childTransform.gameObject;
+                        Vector3 w_pos = vertex.transform.position;  //world pos
+                        float childRes = Vector3.Dot(w_planeNormal, w_pos) - Vector3.Dot(w_planeNormal, w_planePoint);
+                        if (childRes * res > 0)
+                        {
+                            vertex.transform.parent = newModelVertex.transform;
+                            done = false;
+                        }
                     }
                 }
+                createModel.modelList.Add(newModel);
             }
         }
 
