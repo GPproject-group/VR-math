@@ -23,7 +23,13 @@ public class OperationScript : MonoBehaviour
         }
         foreach(GameObject v in GlobalData.selectedVertex)
         {
-            v.tag = "vertex";
+            foreach (Transform child in v.transform)
+            {
+                Destroy(child.gameObject);
+            }
+            GameObject effect = (GameObject)Instantiate(Resources.Load("Prefabs/MagicSphereBlue"));
+            effect.transform.parent = this.transform;
+            effect.transform.localPosition = Vector3.zero;
         }
         GlobalData.selectedVertex.Clear();
         GlobalData.selectedPlane.Clear();
