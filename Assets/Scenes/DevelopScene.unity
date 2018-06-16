@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571334, b: 0.3069219, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -3894,7 +3894,8 @@ MonoBehaviour:
   files: []
   importBtn: {fileID: 1105183421160852, guid: 684c11e98b7784892a0d3ca7a4f8e06e, type: 2}
   parent: {fileID: 545046516}
-  controllerRight: {fileID: 0}
+  controllerRight: {fileID: 593628462}
+  scale: 0.1
 --- !u!114 &545046519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9284,7 +9285,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1739439542}
-        m_MethodName: selectImportModel
+        m_MethodName: selectImportModelMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
