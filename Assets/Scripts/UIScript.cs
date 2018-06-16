@@ -17,6 +17,7 @@ public class UIScript : MonoBehaviour {
 	public GameObject keyboard;
     public GameObject operationMenu;
     public GameObject infoMenu;
+	public GameObject importModelMenu;
 	// Use this for initialization
 	void Start () {
 		
@@ -219,6 +220,19 @@ public class UIScript : MonoBehaviour {
             btn.DOScale(Vector3.one, 0.3f).SetDelay(i * 0.1f);
         }
     }
+
+	public void selectImportModel()
+	{
+		modelMenu.SetActive (false);
+		importModelMenu.SetActive (true);
+		int cnt = importModelMenu.transform.childCount;
+		for (int i = 0; i < cnt; i++)
+		{
+			Transform btn = importModelMenu.transform.GetChild(i);
+			btn.transform.localScale = Vector3.zero;
+			btn.DOScale(Vector3.one, 0.3f).SetDelay(i * 0.1f);
+		}
+	}
 
     public void selectLine()
     {
