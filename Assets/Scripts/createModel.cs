@@ -135,6 +135,10 @@ public class createModel : MonoBehaviour {
             selObjSrc.isUsable = true;
             selObjSrc.pointerActivatesUseAction = true;
             selObjSrc.controllerRight = controRight;
+
+            GameObject effect = (GameObject)Instantiate(Resources.Load("Prefabs/MagicSphereBlue"));
+            effect.transform.parent = point.transform;
+            effect.transform.localPosition = Vector3.zero;
         }
         vertexObj.AddComponent<changeVertexsPoi>();
         vertexObj.GetComponent<changeVertexsPoi>().modelObj = newTriangle;
@@ -265,6 +269,10 @@ public class createModel : MonoBehaviour {
             selObjSrc.isUsable = true;
             selObjSrc.pointerActivatesUseAction = true;
             selObjSrc.controllerRight = controRight;
+
+            GameObject effect = (GameObject)Instantiate(Resources.Load("Prefabs/MagicSphereBlue"));
+            effect.transform.parent = point.transform;
+            effect.transform.localPosition = Vector3.zero;
         }
         vertexObj.AddComponent<changeVertexsPoi>();
         vertexObj.GetComponent<changeVertexsPoi>().modelObj = newPlane;
@@ -399,6 +407,10 @@ public class createModel : MonoBehaviour {
             chaMatScr = point.GetComponent<ChangeMaterialScript>();
             chaMatScr.selectedMaterial = matSelect;
             chaMatScr.defaultMaterial = matDefault;
+
+            GameObject effect = (GameObject)Instantiate(Resources.Load("Prefabs/MagicSphereBlue"));
+            effect.transform.parent = point.transform;
+            effect.transform.localPosition = Vector3.zero;
         }
         vertexObj.AddComponent<changeVertexsPoi>();
         vertexObj.GetComponent<changeVertexsPoi>().modelObj = newCone;
@@ -639,6 +651,10 @@ public class createModel : MonoBehaviour {
             selObjSrc.isUsable = true;
             selObjSrc.pointerActivatesUseAction = true;
             selObjSrc.controllerRight = controRight;
+
+            GameObject effect = (GameObject)Instantiate(Resources.Load("Prefabs/MagicSphereBlue"));
+            effect.transform.parent = point.transform;
+            effect.transform.localPosition = Vector3.zero;
         }
         vertexObj.AddComponent<changeVertexsPoi>();
         vertexObj.GetComponent<changeVertexsPoi>().modelObj = newPyramid;
@@ -884,6 +900,10 @@ public class createModel : MonoBehaviour {
             selObjSrc.pointerActivatesUseAction = true;
             selObjSrc.controllerRight = controRight;
 
+            GameObject effect = (GameObject)Instantiate(Resources.Load("Prefabs/MagicSphereBlue"));
+            effect.transform.parent = point.transform;
+            effect.transform.localPosition = Vector3.zero;
+
         }
         vertexObj.AddComponent<changeVertexsPoi>();
         vertexObj.GetComponent<changeVertexsPoi>().modelObj = newCube;
@@ -1125,6 +1145,10 @@ public class createModel : MonoBehaviour {
             selObjSrc.pointerActivatesUseAction = true;
             selObjSrc.controllerRight = controRight;
 
+            GameObject effect = (GameObject)Instantiate(Resources.Load("Prefabs/MagicSphereBlue"));
+            effect.transform.parent = point.transform;
+            effect.transform.localPosition = Vector3.zero;
+
         }
         vertexObj.AddComponent<changeVertexsPoi>();
         vertexObj.GetComponent<changeVertexsPoi>().modelObj = newCylinder;
@@ -1236,6 +1260,10 @@ public class createModel : MonoBehaviour {
         selObjSrc.isUsable = true;
         selObjSrc.pointerActivatesUseAction = true;
         selObjSrc.controllerRight = controRight;
+
+        GameObject effect = (GameObject)Instantiate(Resources.Load("Prefabs/MagicSphereBlue"));
+        effect.transform.parent = point.transform;
+        effect.transform.localPosition = Vector3.zero;
 
         vertexObj.AddComponent<changeVertexsPoi>();
         vertexObj.GetComponent<changeVertexsPoi>().modelObj = newSphere;

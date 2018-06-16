@@ -14,4 +14,5 @@ public class changeVertexsPoi : MonoBehaviour {
 	void Update () {
         this.gameObject.transform.position = modelObj.transform.position;
 	}
+
 }
