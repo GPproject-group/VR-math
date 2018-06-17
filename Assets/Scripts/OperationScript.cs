@@ -5,7 +5,7 @@ using UnityEngine;
 public class OperationScript : MonoBehaviour
 {
     private int mode;    //0:nothing 1:line  2:plane
-    private List<LineRenderer> lrList;
+    private List<GameObject> lrobjList;
     public void connectToLine()
     {
         mode = 1;
@@ -17,18 +17,19 @@ public class OperationScript : MonoBehaviour
     }
     public void reset()
     {
-        foreach(LineRenderer lr in lrList)
+        foreach(GameObject obj in lrobjList)
         {
-            Destroy(lr);
+            Destroy(obj);
         }
         foreach(GameObject v in GlobalData.selectedVertex)
         {
+            v.tag = "vertex";
             foreach (Transform child in v.transform)
             {
                 Destroy(child.gameObject);
             }
             GameObject effect = (GameObject)Instantiate(Resources.Load("Prefabs/MagicSphereBlue"));
-            effect.transform.parent = this.transform;
+            effect.transform.parent = v.transform;
             effect.transform.localPosition = Vector3.zero;
         }
         GlobalData.selectedVertex.Clear();
@@ -39,7 +40,7 @@ public class OperationScript : MonoBehaviour
     void Start()
     {
         mode = 0;
-        lrList = new List<LineRenderer>();
+        lrobjList = new List<GameObject>();
     }
 
     void Update()
@@ -50,8 +51,9 @@ public class OperationScript : MonoBehaviour
             {
                 Vector3 p1 = GlobalData.selectedVertex[0].transform.position;
                 Vector3 p2 = GlobalData.selectedVertex[1].transform.position;
-                LineRenderer lr = this.gameObject.AddComponent<LineRenderer>();
-                lrList.Add(lr);
+                GameObject obj = new GameObject();
+                LineRenderer lr = obj.AddComponent<LineRenderer>();
+                lrobjList.Add(obj);
                 lr.positionCount = 2;
                 lr.startWidth = 0.05f;
                 lr.endWidth = 0.05f;
@@ -59,6 +61,18 @@ public class OperationScript : MonoBehaviour
                 lr.SetPosition(1, p2);
                 Vector3[] line = { p1, p2 };
                 GlobalData.selectedLine.Add(line);
+                foreach (GameObject v in GlobalData.selectedVertex)
+                {
+                    v.tag = "vertex";
+                    foreach (Transform child in v.transform)
+                    {
+                        Destroy(child.gameObject);
+                    }
+                    GameObject effect = (GameObject)Instantiate(Resources.Load("Prefabs/MagicSphereBlue"));
+                    effect.transform.parent = v.transform;
+                    effect.transform.localPosition = Vector3.zero;
+                }
+                GlobalData.selectedVertex.Clear();
             }
         }
         else if (mode == 2)
@@ -68,8 +82,10 @@ public class OperationScript : MonoBehaviour
                 Vector3 p1 = GlobalData.selectedVertex[0].transform.position;
                 Vector3 p2 = GlobalData.selectedVertex[1].transform.position;
                 Vector3 p3 = GlobalData.selectedVertex[2].transform.position;
-                LineRenderer lr = this.gameObject.AddComponent<LineRenderer>();
-                lrList.Add(lr);
+                GameObject obj = new GameObject();
+                LineRenderer lr = obj.AddComponent<LineRenderer>();
+                lrobjList.Add(obj);
+                lr.loop = true;
                 lr.positionCount = 3;
                 lr.startWidth = 0.05f;
                 lr.endWidth = 0.05f;
@@ -78,6 +94,18 @@ public class OperationScript : MonoBehaviour
                 lr.SetPosition(2, p3);
                 Vector3[] plane = { p1, p2, p3 };
                 GlobalData.selectedPlane.Add(plane);
+                foreach (GameObject v in GlobalData.selectedVertex)
+                {
+                    v.tag = "vertex";
+                    foreach (Transform child in v.transform)
+                    {
+                        Destroy(child.gameObject);
+                    }
+                    GameObject effect = (GameObject)Instantiate(Resources.Load("Prefabs/MagicSphereBlue"));
+                    effect.transform.parent = v.transform;
+                    effect.transform.localPosition = Vector3.zero;
+                }
+                GlobalData.selectedVertex.Clear();
             }
         }
         mode = 0;

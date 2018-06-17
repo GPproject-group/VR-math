@@ -39,7 +39,7 @@ public class MathCalculate {
         }
 
         //parallel?
-        if (angle < epsilonPara) 
+        if (angle == 0) 
         {
             return LLRELATION.PARALLEL;
         }

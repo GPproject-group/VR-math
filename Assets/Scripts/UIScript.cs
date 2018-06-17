@@ -254,7 +254,7 @@ public class UIScript : MonoBehaviour {
             operationMenu.SetActive(false);
             cancelButton.SetActive(false);
             infoMenu.SetActive(true);
-            GameObject.Find("Canvas/InfoMenu/InfoTex").GetComponent<Text>().text = "You must select two point before connecting to line.";
+            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "You must select two point before connecting to line.";
         }
     }
 
@@ -278,7 +278,7 @@ public class UIScript : MonoBehaviour {
             operationMenu.SetActive(false);
             cancelButton.SetActive(false);
             infoMenu.SetActive(true);
-            GameObject.Find("Canvas/InfoMenu/InfoTex").GetComponent<Text>().text = "You must select two point before connecting to plane.";
+            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "You must select there point before connecting to plane.";
         }
     }
 
@@ -289,13 +289,13 @@ public class UIScript : MonoBehaviour {
         infoMenu.SetActive(true);
         if (GlobalData.selectedLine.Count != 1)
         {
-            GameObject.Find("Canvas/InfoMenu/InfoTex").GetComponent<Text>().text = "You must select a line before calculate its length.";
+            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "You must select a line before calculate its length.";
         }
         else
         {
             Vector3[] line = GlobalData.selectedLine[0];
             float len = MathCalculate.segmentLength(line);
-            GameObject.Find("Canvas/InfoMenu/InfoTex").GetComponent<Text>().text = "Length of selected line is " + len.ToString() + ".";
+            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Length of selected line is " + len.ToString() + ".";
         }
     }
 
@@ -311,25 +311,25 @@ public class UIScript : MonoBehaviour {
             Vector3[] line1 = GlobalData.selectedLine[0];
             Vector3[] line2 = GlobalData.selectedLine[1];
             LLRELATION relation = MathCalculate.llRelation(line1,line2);
-            GameObject.Find("Canvas/InfoMenu/InfoTex").GetComponent<Text>().text = "Relation of the two selected lines is : " + MathCalculate.toString(relation) + ".";
+            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Relation of the two selected lines is : " + MathCalculate.toString(relation) + ".";
         }
         else if (linecnt == 1 && planecnt == 1)
         {
             Vector3[] line = GlobalData.selectedLine[0];
             Vector3[] plane = GlobalData.selectedPlane[0];
             LPRELATION relation = MathCalculate.lpRelation(line, plane);
-            GameObject.Find("Canvas/InfoMenu/InfoTex").GetComponent<Text>().text = "Relation of selected line and plane is : " + MathCalculate.toString(relation) + ".";
+            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Relation of selected line and plane is : " + MathCalculate.toString(relation) + ".";
         }
         else if (linecnt == 0 && planecnt == 2)
         {
             Vector3[] plane1 = GlobalData.selectedPlane[0];
             Vector3[] plane2 = GlobalData.selectedPlane[1];
             PPRELATION relation = MathCalculate.ppRelation(plane1, plane2);
-            GameObject.Find("Canvas/InfoMenu/InfoTex").GetComponent<Text>().text = "Relation of two selected planes is : " + MathCalculate.toString(relation) + ".";
+            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Relation of two selected planes is : " + MathCalculate.toString(relation) + ".";
         }
         else
         {
-            GameObject.Find("Canvas/InfoMenu/InfoTex").GetComponent<Text>().text = "Selection is not correct.";
+            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Selection is not correct.";
         }
     }
 
