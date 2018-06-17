@@ -223,8 +223,23 @@ public class UIScript : MonoBehaviour {
 
 	public void selectImportModel()
 	{
-		modelMenu.SetActive (false);
-		importModelMenu.SetActive (true);
+		importModelMenu.SetActive(false);
+		initMenu.SetActive(true);
+		cancelButton.SetActive(false);
+		int cnt = initMenu.transform.childCount;
+		for (int i = 0; i < cnt; i++)
+		{
+			Transform btn = initMenu.transform.GetChild(i);
+			btn.transform.localScale = Vector3.zero;
+			btn.DOScale(Vector3.one, 0.3f).SetDelay(i * 0.1f);
+		}
+	}
+
+	public void selectImportModelMenu()
+	{
+		modelMenu.SetActive(false);
+		importModelMenu.SetActive(true);
+		cancelButton.SetActive(false);
 		int cnt = importModelMenu.transform.childCount;
 		for (int i = 0; i < cnt; i++)
 		{

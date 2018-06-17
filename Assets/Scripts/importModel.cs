@@ -11,6 +11,7 @@ public class ImportModel : MonoBehaviour {
 	public GameObject importBtn;
 	public GameObject parent;
     public GameObject controllerRight;
+	public string scale;
 
 	// Use this for initialization
 	void Start () {
@@ -44,6 +45,8 @@ public class ImportModel : MonoBehaviour {
 				GameObject obj = OBJLoader.LoadOBJFile (path + '/' + filename);
                 GameObject vertexobj = new GameObject(obj.name + "-vertex");
 				obj.transform.position = new Vector3 (0, 0, 0);
+				float scaleFloat = float.Parse(scale);
+				obj.transform.localScale = new Vector3(scaleFloat,scaleFloat,scaleFloat);
                 obj.tag = "model";
                 createModel.modelList.Add(obj);
                 Rigidbody rb = obj.AddComponent<Rigidbody>();
@@ -58,6 +61,9 @@ public class ImportModel : MonoBehaviour {
                 ttp.isUsable = true;
                 ttp.pointerActivatesUseAction = true;
                 ttp.controllerRight = controllerRight;
+
+				GameObject select = GameObject.Find("Canvas");
+				select.GetComponent<UIScript>().selectImportModel();
 
             });
 
