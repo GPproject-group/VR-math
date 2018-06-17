@@ -17,11 +17,12 @@ public class Keyboard : MonoBehaviour, IPointerClickHandler {
 	}
 
 	public void OnPointerClick(PointerEventData eventData){
+		
 		keyboard.SetActive (false);
 		Vector3 pos = gameObject.transform.position;
-		pos.y -= 1;
-		Debug.Log(pos);
-		keyboard.transform.position = pos;
+		pos.y -= float.Parse ("1.15");
+		Debug.Log (pos);
+		keyboard.transform.localPosition = pos;
 		keyboard.GetComponent<UI_Keyboard>().input = gameObject.GetComponent<InputField>();
 		keyboard.SetActive (true);
 	}
