@@ -18,6 +18,10 @@ public class UIScript : MonoBehaviour {
     public GameObject operationMenu;
     public GameObject infoMenu;
 	public GameObject importModelMenu;
+
+	public GameObject wrongInput0;
+	public GameObject wrongInput1;
+	public GameObject wrongInput2;
 	// Use this for initialization
 	void Start () {
 		
@@ -130,7 +134,28 @@ public class UIScript : MonoBehaviour {
 		cancelButton.SetActive (true);
 	}
 
+	private void wrongInput(int errorno){
+		switch (errorno) {
+		case 0:
+			Debug.Log ("input is not a float");
+			wrongInput0.SetActive (true);
+			break;
+		case 1:
+			Debug.Log ("too large");
+			wrongInput1.SetActive (true);
+			break;
+		case 2:
+			Debug.Log ("too small");
+			wrongInput2.SetActive (true);
+			break;
+		}
+	}
 
+	private void hideWrongInput(){
+		wrongInput0.SetActive (false);
+		wrongInput1.SetActive (false);
+		wrongInput2.SetActive (false);
+	}
 
 	/* 
 	 * confirm part
@@ -138,12 +163,21 @@ public class UIScript : MonoBehaviour {
 	 */
     public void confirmPolynomialFunction()
     {      
+		hideWrongInput ();
         cancelButton.SetActive(false);
         initMenu.SetActive(true);
-        float k1 = float.Parse(GameObject.Find("Canvas/PolynomialFuncMenu/Formula/k1").GetComponent<InputField>().text);
-        float k2 = float.Parse(GameObject.Find("Canvas/PolynomialFuncMenu/Formula/k2").GetComponent<InputField>().text);
-        float k3 = float.Parse(GameObject.Find("Canvas/PolynomialFuncMenu/Formula/k3").GetComponent<InputField>().text);
-        float b = float.Parse(GameObject.Find("Canvas/PolynomialFuncMenu/Formula/b").GetComponent<InputField>().text);
+		float k1, k2, k3, b;
+		if (!float.TryParse (GameObject.Find ("Canvas/PolynomialFuncMenu/Formula/k1").GetComponent<InputField> ().text,out k1) ||
+			!float.TryParse (GameObject.Find ("Canvas/PolynomialFuncMenu/Formula/k2").GetComponent<InputField> ().text,out k2) ||
+			!float.TryParse (GameObject.Find ("Canvas/PolynomialFuncMenu/Formula/k3").GetComponent<InputField> ().text,out k3) ||
+			!float.TryParse (GameObject.Find ("Canvas/PolynomialFuncMenu/Formula/b").GetComponent<InputField> ().text,out b)) {
+			wrongInput (0);
+			return;
+		}
+		//float k1 = float.Parse(GameObject.Find("Canvas/PolynomialFuncMenu/Formula/k1").GetComponent<InputField>().text);
+        //float k2 = float.Parse(GameObject.Find("Canvas/PolynomialFuncMenu/Formula/k2").GetComponent<InputField>().text);
+        //float k3 = float.Parse(GameObject.Find("Canvas/PolynomialFuncMenu/Formula/k3").GetComponent<InputField>().text);
+        //float b = float.Parse(GameObject.Find("Canvas/PolynomialFuncMenu/Formula/b").GetComponent<InputField>().text);
         float[] args = { k1, k2, k3, b };
         Vector2 domain = new Vector2(-5, 5);
         GameObject function = GameObject.Find("Axis/FunctionRender");
@@ -156,10 +190,18 @@ public class UIScript : MonoBehaviour {
 
     public void confirmExponentialFunction()
     {
+		hideWrongInput ();
         cancelButton.SetActive(false);
         initMenu.SetActive(true);
-        float k1 = float.Parse(GameObject.Find("Canvas/ExponentialFuncMenu/Formula/k1").GetComponent<InputField>().text);
-        int k2 = int.Parse(GameObject.Find("Canvas/ExponentialFuncMenu/Formula/k2").GetComponent<InputField>().text);
+		float k1;
+		int k2;
+		if (!float.TryParse (GameObject.Find ("Canvas/ExponentialFuncMenu/Formula/k1").GetComponent<InputField> ().text, out k1) ||
+			!int.TryParse (GameObject.Find ("Canvas/ExponentialFuncMenu/Formula/k2").GetComponent<InputField> ().text, out k2)) {
+			wrongInput (0);
+			return;
+		}
+        //float k1 = float.Parse(GameObject.Find("Canvas/ExponentialFuncMenu/Formula/k1").GetComponent<InputField>().text);
+        //int k2 = int.Parse(GameObject.Find("Canvas/ExponentialFuncMenu/Formula/k2").GetComponent<InputField>().text);
         float[] args = new float[k2 + 1];
         args[0] = k1;
         for(int i = 1; i < args.Length; i++)
@@ -177,10 +219,27 @@ public class UIScript : MonoBehaviour {
 
 	public void confirmCubeModel()
 	{
+		hideWrongInput ();
+		int edge;
+		if (!int.TryParse (GameObject.Find ("Canvas/CubesMenu/Formula/edge").GetComponent<InputField> ().text,out edge)) {
+			wrongInput (0);
+			return;
+		}
+
+		//int edge = int.Parse (GameObject.Find ("Canvas/CubesMenu/Formula/edge").GetComponent<InputField> ().text);
+
+		if (edge > 19) {
+			wrongInput (1);
+			return;
+		}
+
+		if (edge < 1) {
+			wrongInput (2);
+			return;
+		}
+
 		cancelButton.SetActive(false);
-		initMenu.SetActive(true);
-		int edge = int.Parse (GameObject.Find ("Canvas/CubesMenu/Formula/edge").GetComponent<InputField> ().text);
-		GameObject model = GameObject.Find ("Axis/ModelCreater");
+		initMenu.SetActive(true);	GameObject model = GameObject.Find ("Axis/ModelCreater");
 		model.GetComponent<createModel> ().createCube (edge);
 		cubesMenu.SetActive (false);
 		keyboard.SetActive (false);
@@ -188,10 +247,26 @@ public class UIScript : MonoBehaviour {
 
 	public void confirmPyramidModel()
 	{
+		hideWrongInput ();
+		int edge;
+		if (!int.TryParse (GameObject.Find ("Canvas/PyramidsMenu/Formula/edge").GetComponent<InputField> ().text,out edge)) {
+			wrongInput (0);
+			return;
+		}
+
+		//int edge = int.Parse (GameObject.Find ("Canvas/PyramidsMenu/Formula/edge").GetComponent<InputField> ().text);
+
+		if (edge > 19) {
+			wrongInput (1);
+			return;
+		}
+
+		if (edge < 1) {
+			wrongInput (2);
+			return;
+		}
 		cancelButton.SetActive(false);
-		initMenu.SetActive(true);
-		int edge = int.Parse (GameObject.Find ("Canvas/PyramidsMenu/Formula/edge").GetComponent<InputField> ().text);
-		GameObject model = GameObject.Find ("Axis/ModelCreater");
+		initMenu.SetActive(true);	GameObject model = GameObject.Find ("Axis/ModelCreater");
 		model.GetComponent<createModel> ().createPyramid (edge);
 		pyramidMenu.SetActive (false);
 		keyboard.SetActive (false);
@@ -368,6 +443,7 @@ public class UIScript : MonoBehaviour {
 
     public void cancel()
     {
+		hideWrongInput ();
         modelMenu.SetActive(false);
         mainMenu.SetActive(false);
         initMenu.SetActive(true);
