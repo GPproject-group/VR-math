@@ -6,6 +6,7 @@ public class OperationScript : MonoBehaviour
 {
     private int mode;    //0:nothing 1:line  2:plane
     private List<GameObject> lrobjList;
+    public GameObject controllerRight;
     public void connectToLine()
     {
         mode = 1;
@@ -14,6 +15,44 @@ public class OperationScript : MonoBehaviour
     public void connectToPlane()
     {
         mode = 2;
+    }
+    public void midpoint()
+    {
+        if (GlobalData.selectedVertex.Count == 2)
+        {
+            GameObject midpointObj = new GameObject("new point");
+            GlobalData.selectedMidpoint.Add(midpointObj);
+            midpointObj.transform.position = (GlobalData.selectedVertex[0].transform.position + GlobalData.selectedVertex[1].transform.position)/2;
+            midpointObj.tag = "selected";
+            GameObject effect0 = (GameObject)Instantiate(Resources.Load("Prefabs/MagicSphereGreen"));
+            effect0.transform.parent = midpointObj.transform;
+            effect0.transform.localPosition = Vector3.zero;
+            midpointObj.AddComponent<SphereCollider>();
+            midpointObj.AddComponent<ChangeMaterialScript>();
+            midpointObj.AddComponent<VRTK.Examples.SelectObjectScript>();
+            SphereCollider sphereCol = midpointObj.GetComponent<SphereCollider>();
+            sphereCol.isTrigger = false;
+            sphereCol.radius = 0.1f;
+
+            VRTK.Examples.SelectObjectScript selObjSrc = midpointObj.GetComponent<VRTK.Examples.SelectObjectScript>();
+            selObjSrc.holdButtonToGrab = false;
+            selObjSrc.isUsable = true;
+            selObjSrc.pointerActivatesUseAction = true;
+            selObjSrc.controllerRight = controllerRight;
+
+            foreach (GameObject v in GlobalData.selectedVertex)
+            {
+                v.tag = "vertex";
+                foreach (Transform child in v.transform)
+                {
+                    Destroy(child.gameObject);
+                }
+                GameObject effect = (GameObject)Instantiate(Resources.Load("Prefabs/MagicSphereBlue"));
+                effect.transform.parent = v.transform;
+                effect.transform.localPosition = Vector3.zero;
+            }
+            GlobalData.selectedVertex.Clear();
+        }
     }
     public void reset()
     {
@@ -32,9 +71,14 @@ public class OperationScript : MonoBehaviour
             effect.transform.parent = v.transform;
             effect.transform.localPosition = Vector3.zero;
         }
+        foreach (GameObject v in GlobalData.selectedMidpoint)
+        {
+            Destroy(v);
+        }
         GlobalData.selectedVertex.Clear();
         GlobalData.selectedPlane.Clear();
         GlobalData.selectedLine.Clear();
+        GlobalData.selectedMidpoint.Clear();
     }
 
     void Start()
