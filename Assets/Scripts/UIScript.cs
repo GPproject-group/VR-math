@@ -366,6 +366,20 @@ public class UIScript : MonoBehaviour {
         }
     }
 
+    public void selectMidpoint()
+    {
+        operationMenu.SetActive(false);
+        cancelButton.SetActive(false);
+        initMenu.SetActive(true);
+        int cnt = initMenu.transform.childCount;
+        for (int i = 0; i < cnt; i++)
+        {
+            Transform btn = initMenu.transform.GetChild(i);
+            btn.transform.localScale = Vector3.zero;
+            btn.DOScale(Vector3.one, 0.3f).SetDelay(i * 0.1f);
+        }
+    }
+
     public void cancel()
     {
         modelMenu.SetActive(false);
