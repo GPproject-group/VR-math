@@ -549,6 +549,26 @@ public class UIScript : MonoBehaviour {
         }
     }
 
+    public void selectModelReset()
+    {
+        modelMenu.SetActive(false);
+        cancelButton.SetActive(false);
+        initMenu.SetActive(true);
+        int cnt = initMenu.transform.childCount;
+        for (int i = 0; i < cnt; i++)
+        {
+            Transform btn = initMenu.transform.GetChild(i);
+            btn.transform.localScale = Vector3.zero;
+            btn.DOScale(Vector3.one, 0.3f).SetDelay(i * 0.1f);
+        }
+        foreach(GameObject model in createModel.modelList)
+        {
+            GameObject vertexObj = GameObject.Find(model.name + "-vertex");
+            Destroy(model);
+            Destroy(vertexObj);
+        }
+    }
+
     public void cancel()
     {
 		hideWrongInput ();

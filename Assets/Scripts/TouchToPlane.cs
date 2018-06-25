@@ -535,6 +535,7 @@
             SortAngleList.Sort();
             //切割面
             GameObject clipPlane = new GameObject("clip plane");
+            clipPlane.transform.parent = this.transform;
             clipPlane.AddComponent<MeshFilter>();
             clipPlane.AddComponent<MeshRenderer>();
 
