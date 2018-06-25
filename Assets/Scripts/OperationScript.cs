@@ -9,6 +9,7 @@ public class OperationScript : MonoBehaviour
 
     public Material mat;
     public GameObject controllerRight;
+	public GameObject character;
     public void connectToLine()
     {
         mode = 1;
@@ -89,6 +90,7 @@ public class OperationScript : MonoBehaviour
         {
             Destroy(obj);
         }
+		character.GetComponent<charEvent> ().speakSomething ("模型已清空");
     }
 
     void Start()

@@ -5,6 +5,7 @@
 
     public class TouchToPlane : VRTK_InteractableObject
     {
+		public GameObject character;
         public GameObject controllerRight;
 
         private bool m_IsClearSamePoint = false;
@@ -54,6 +55,7 @@
 
         protected void Start()
         {
+			character = GameObject.Find("MaleFreeSimpleMovement1");
             vertexObj = GameObject.Find(this.name + "-vertex");
             if (flag)
             {
@@ -82,6 +84,10 @@
                     m_ClipPlaneNormal = Vector3.Cross(touchBeganPoint_local - controllerPoint_local, touchBeganPoint_local - touchEndPoint_local).normalized;
                     m_ClipPlanePoint = touchBeganPoint_local;
                     ClipMesh();
+
+					//end of clip
+					character.GetComponent<charEvent>().hideDialog();
+
                     clipPlaneV.Clear();
                     foreach(GameObject model in createModel.modelList)
                     {
