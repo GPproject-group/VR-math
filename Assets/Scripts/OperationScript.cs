@@ -6,6 +6,8 @@ public class OperationScript : MonoBehaviour
 {
     private int mode;    //0:nothing 1:line  2:plane
     private List<GameObject> lrobjList;
+
+    public Material mat;
     public GameObject controllerRight;
     public void connectToLine()
     {
@@ -103,6 +105,7 @@ public class OperationScript : MonoBehaviour
                 lr.endWidth = 0.05f;
                 lr.SetPosition(0, p1);
                 lr.SetPosition(1, p2);
+                lr.material = mat;
                 Vector3[] line = { p1, p2 };
                 GlobalData.selectedLine.Add(line);
                 foreach (GameObject v in GlobalData.selectedVertex)
@@ -126,7 +129,8 @@ public class OperationScript : MonoBehaviour
                 Vector3 p1 = GlobalData.selectedVertex[0].transform.position;
                 Vector3 p2 = GlobalData.selectedVertex[1].transform.position;
                 Vector3 p3 = GlobalData.selectedVertex[2].transform.position;
-                GameObject obj = new GameObject();
+
+                /*GameObject obj = new GameObject();
                 LineRenderer lr = obj.AddComponent<LineRenderer>();
                 lrobjList.Add(obj);
                 lr.loop = true;
@@ -135,7 +139,45 @@ public class OperationScript : MonoBehaviour
                 lr.endWidth = 0.05f;
                 lr.SetPosition(0, p1);
                 lr.SetPosition(1, p2);
-                lr.SetPosition(2, p3);
+                lr.SetPosition(2, p3);*/
+                GameObject obj = new GameObject();
+                obj.AddComponent<MeshFilter>();
+                obj.AddComponent<MeshRenderer>();
+                lrobjList.Add(obj);
+                MeshFilter filter = obj.GetComponent<MeshFilter>();
+                Mesh mesh = new Mesh();
+                filter.mesh = mesh;
+                Vector3[] vertices = new Vector3[3 * 2];
+                Vector2[] uvs = new Vector2[3 * 2];
+                int[] tris;
+                int i;
+
+                vertices[0] = p1;
+                vertices[3] = p1;
+                vertices[1] = p2;
+                vertices[4] = p2;
+                vertices[2] = p3;
+                vertices[5] = p3;
+                for (i = 0; i < 3; i++)
+                {
+                    uvs[i] = new Vector2(1.0f * i / 3, 1);
+                    uvs[i + 3] = new Vector2(1.0f * i / 3, 0);
+                }
+                mesh.vertices = vertices;
+                mesh.uv = uvs;
+                
+                int cnt = 0;
+                tris = new int[3 * 2];
+                tris[cnt++] = 0;
+                tris[cnt++] = 2;
+                tris[cnt++] = 1;
+                tris[cnt++] = 3;
+                tris[cnt++] = 4;
+                tris[cnt++] = 5;
+                mesh.triangles = tris;
+                mesh.RecalculateNormals();
+                obj.GetComponent<MeshRenderer>().material = mat;
+
                 Vector3[] plane = { p1, p2, p3 };
                 GlobalData.selectedPlane.Add(plane);
                 foreach (GameObject v in GlobalData.selectedVertex)
