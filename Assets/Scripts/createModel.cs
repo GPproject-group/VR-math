@@ -326,6 +326,7 @@ public class createModel : MonoBehaviour {
         mesh = new Mesh();
         filter.mesh = mesh;
         newCone.GetComponent<MeshRenderer>().material = mat;
+        newCone.transform.localScale = new Vector3(2, 2, 2);
 
         float myRadius = 0.5f;
         int myAngleStep = 20;

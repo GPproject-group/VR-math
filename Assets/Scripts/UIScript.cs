@@ -26,6 +26,8 @@ public class UIScript : MonoBehaviour {
 	public int charMode;
 
 	public GameObject character;
+
+    public GameObject controllerRight;
 	// Use this for initialization
 	void Start () {
 		
@@ -571,7 +573,30 @@ public class UIScript : MonoBehaviour {
 
     public void selectClipPlane()
     {
-
+        if (GlobalData.clipPlane.Count==0)
+        {
+            character.GetComponentInChildren<charEvent>().speakSomething("当前没有切割面");
+        }
+        else
+        {
+            character.GetComponentInChildren<charEvent>().speakSomething("用射线指向一个切割面两秒以上，选中切割面");
+            foreach(GameObject model in createModel.modelList)
+            {
+                model.GetComponent<MeshCollider>().enabled = false;
+            }
+            foreach(GameObject clipPlane in GlobalData.clipPlane)
+            {
+                Rigidbody rb = clipPlane.AddComponent<Rigidbody>();
+                rb.isKinematic = true;
+                rb.useGravity = false;
+                clipPlane.AddComponent<MeshCollider>();
+                VRTK.Examples.SelectClipPlaneScript scp = clipPlane.AddComponent<VRTK.Examples.SelectClipPlaneScript>();
+                scp.holdButtonToGrab = false;
+                scp.isUsable = true;
+                scp.pointerActivatesUseAction = true;
+                scp.controllerRight = controllerRight;
+            }
+        }
     }
 
     public void cancel()

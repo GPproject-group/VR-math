@@ -535,7 +535,7 @@
             SortAngleList.Sort();
             //切割面
             GameObject clipPlane = new GameObject("clip plane");
-            clipPlane.transform.parent = this.transform;
+            clipPlane.transform.parent = GameObject.Find(this.name + "-vertex").transform;
             clipPlane.AddComponent<MeshFilter>();
             clipPlane.AddComponent<MeshRenderer>();
 
@@ -547,21 +547,22 @@
             Vector3[] myVertices = clipPlaneV.ToArray();
             Vector2[] myUV = new Vector2[myVertices.Length];
 
+
             int[] myTriangle = new int[(myVertices.Length - 2) * 3];
             for (int i = 0; i <= myTriangle.Length - 3; i = i + 3)
             {
                 myTriangle[i] = 0;
-                myTriangle[i + 1] = i/3 + 1;
-                myTriangle[i + 2] = i/3 + 2;
+                myTriangle[i + 1] = i / 3 + 1;
+                myTriangle[i + 2] = i / 3 + 2;
             }
-            // 0:0 1 2  3:0 2 3 6:0 3 4
 
             mesh.vertices = myVertices;
             mesh.triangles = myTriangle;
-//            mesh.uv = myUV;
+            mesh.uv = myUV;
             mesh.RecalculateBounds();
             mesh.RecalculateNormals();
             mesh.RecalculateTangents();
+            GlobalData.clipPlane.Add(clipPlane);
 
             //缝合切口
             for (int verticeIndex = 0; verticeIndex < SortAngleList.Count - 1;)
@@ -615,6 +616,7 @@
                 ttp.isUsable = true;
                 ttp.pointerActivatesUseAction = true;
                 ttp.controllerRight = controllerRight;
+                ttp.clipMat = clipMat;
 
                 changeVertexsPoi cv = newModelVertex.AddComponent<changeVertexsPoi>();
                 cv.modelObj = newModel;
