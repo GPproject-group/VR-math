@@ -569,6 +569,11 @@ public class UIScript : MonoBehaviour {
         }
     }
 
+    public void selectClipPlane()
+    {
+
+    }
+
     public void cancel()
     {
 		hideWrongInput ();
