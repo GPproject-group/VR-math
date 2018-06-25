@@ -336,9 +336,9 @@ public class UIScript : MonoBehaviour {
     {
         if (GlobalData.selectedVertex.Count == 2)
         {
-            operationMenu.SetActive(false);
-            cancelButton.SetActive(false);
-            initMenu.SetActive(true);
+            //operationMenu.SetActive(false);
+            //cancelButton.SetActive(false);
+            //initMenu.SetActive(true);
             int cnt = initMenu.transform.childCount;
             for (int i = 0; i < cnt; i++)
             {
@@ -346,13 +346,15 @@ public class UIScript : MonoBehaviour {
                 btn.transform.localScale = Vector3.zero;
                 btn.DOScale(Vector3.one, 0.3f).SetDelay(i * 0.1f);
             }
+			character.GetComponent<charEvent>().speakSomething("成功选中直线");
         }
         else
         {
-            operationMenu.SetActive(false);
-            cancelButton.SetActive(false);
-            infoMenu.SetActive(true);
-            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "You must select two point before connecting to line.";
+            //operationMenu.SetActive(false);
+            //cancelButton.SetActive(false);
+            //infoMenu.SetActive(true);
+            //GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "You must select two point before connecting to line.";
+			character.GetComponent<charEvent>().speakSomething("请选中两个点");
         }
     }
 
@@ -360,9 +362,9 @@ public class UIScript : MonoBehaviour {
     {
         if (GlobalData.selectedVertex.Count == 3)
         {
-            operationMenu.SetActive(false);
-            cancelButton.SetActive(false);
-            initMenu.SetActive(true);
+            //operationMenu.SetActive(false);
+            //cancelButton.SetActive(false);
+            //initMenu.SetActive(true);
             int cnt = initMenu.transform.childCount;
             for (int i = 0; i < cnt; i++)
             {
@@ -370,38 +372,42 @@ public class UIScript : MonoBehaviour {
                 btn.transform.localScale = Vector3.zero;
                 btn.DOScale(Vector3.one, 0.3f).SetDelay(i * 0.1f);
             }
+			character.GetComponent<charEvent>().speakSomething("成功选中平面");
         }
         else
         {
-            operationMenu.SetActive(false);
-            cancelButton.SetActive(false);
-            infoMenu.SetActive(true);
-            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "You must select there point before connecting to plane.";
+            //operationMenu.SetActive(false);
+            //cancelButton.SetActive(false);
+            //infoMenu.SetActive(true);
+            //GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "You must select there point before connecting to plane.";
+			character.GetComponent<charEvent>().speakSomething("请选中三个点");
         }
     }
 
     public void selectLength()
     {
-        operationMenu.SetActive(false);
-        cancelButton.SetActive(false);
-        infoMenu.SetActive(true);
+        //operationMenu.SetActive(false);
+        //cancelButton.SetActive(false);
+        //infoMenu.SetActive(true);
         if (GlobalData.selectedLine.Count != 1)
         {
-            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "You must select a line before calculate its length.";
+            //GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "You must select a line before calculate its length.";
+			character.GetComponentInChildren<charEvent>().speakSomething("请先选择直线");
         }
         else
         {
             Vector3[] line = GlobalData.selectedLine[0];
             float len = MathCalculate.segmentLength(line);
-            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Length of selected line is " + len.ToString() + ".";
+            //GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Length of selected line is " + len.ToString() + ".";
+			character.GetComponentInChildren<charEvent>().speakSomething("直线长度为\n"+len.ToString());
         }
     }
 
     public void selectRelation()
     {
-        operationMenu.SetActive(false);
-        cancelButton.SetActive(false);
-        infoMenu.SetActive(true);
+        //operationMenu.SetActive(false);
+        //cancelButton.SetActive(false);
+        //infoMenu.SetActive(true);
         int linecnt = GlobalData.selectedLine.Count;
         int planecnt = GlobalData.selectedPlane.Count;
         if (linecnt == 2 && planecnt == 0)
@@ -409,33 +415,37 @@ public class UIScript : MonoBehaviour {
             Vector3[] line1 = GlobalData.selectedLine[0];
             Vector3[] line2 = GlobalData.selectedLine[1];
             LLRELATION relation = MathCalculate.llRelation(line1,line2);
-            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Relation of the two selected lines is : " + MathCalculate.toString(relation) + ".";
+            //GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Relation of the two selected lines is : " + MathCalculate.toString(relation) + ".";
+			character.GetComponentInChildren<charEvent>().speakSomething("线线间几何关系为\n" + MathCalculate.toString(relation));
         }
         else if (linecnt == 1 && planecnt == 1)
         {
             Vector3[] line = GlobalData.selectedLine[0];
             Vector3[] plane = GlobalData.selectedPlane[0];
             LPRELATION relation = MathCalculate.lpRelation(line, plane);
-            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Relation of selected line and plane is : " + MathCalculate.toString(relation) + ".";
+            //GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Relation of selected line and plane is : " + MathCalculate.toString(relation) + ".";
+			character.GetComponentInChildren<charEvent>().speakSomething("线面间几何关系为\n" + MathCalculate.toString(relation));
         }
         else if (linecnt == 0 && planecnt == 2)
         {
             Vector3[] plane1 = GlobalData.selectedPlane[0];
             Vector3[] plane2 = GlobalData.selectedPlane[1];
             PPRELATION relation = MathCalculate.ppRelation(plane1, plane2);
-            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Relation of two selected planes is : " + MathCalculate.toString(relation) + ".";
+            //GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Relation of two selected planes is : " + MathCalculate.toString(relation) + ".";
+			character.GetComponentInChildren<charEvent>().speakSomething("面面间几何关系为\n" + MathCalculate.toString(relation));
         }
         else
         {
-            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Selection is not correct.";
+            //GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Selection is not correct.";
+			character.GetComponentInChildren<charEvent>().speakSomething("选择存在错误");
         }
     }
 
     public void selectClip()
     {
-        operationMenu.SetActive(false);
-        cancelButton.SetActive(false);
-        initMenu.SetActive(true);
+        //operationMenu.SetActive(false);
+        //cancelButton.SetActive(false);
+        //initMenu.SetActive(true);
         int cnt = initMenu.transform.childCount;
         for (int i = 0; i < cnt; i++)
         {
@@ -453,9 +463,9 @@ public class UIScript : MonoBehaviour {
     {
         if (GlobalData.selectedVertex.Count == 2)
         {
-            operationMenu.SetActive(false);
-            cancelButton.SetActive(false);
-            initMenu.SetActive(true);
+            //operationMenu.SetActive(false);
+            //cancelButton.SetActive(false);
+            //initMenu.SetActive(true);
             int cnt = initMenu.transform.childCount;
             for (int i = 0; i < cnt; i++)
             {
@@ -466,38 +476,41 @@ public class UIScript : MonoBehaviour {
         }
         else
         {
-            operationMenu.SetActive(false);
-            cancelButton.SetActive(false);
-            infoMenu.SetActive(true);
+            //operationMenu.SetActive(false);
+            //cancelButton.SetActive(false);
+            //infoMenu.SetActive(true);
             int cnt = initMenu.transform.childCount;
-            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "You must select two points before select midpoint.";
+            //GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "You must select two points before select midpoint.";
+			character.GetComponentInChildren<charEvent>().speakSomething("请先选择两个点");
         }   
     }
 
     public void selectLLAngle()
     {
-        operationMenu.SetActive(false);
-        cancelButton.SetActive(false);
-        infoMenu.SetActive(true);
+        //operationMenu.SetActive(false);
+        //cancelButton.SetActive(false);
+        //infoMenu.SetActive(true);
         int linecnt = GlobalData.selectedLine.Count;
         if (linecnt == 2)
         {
             Vector3[] line1 = GlobalData.selectedLine[0];
             Vector3[] line2 = GlobalData.selectedLine[1];
             float angle = MathCalculate.llAngle(line1, line2);
-            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Angle of the two selected lines is : " + angle.ToString() + ".";
+            //GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Angle of the two selected lines is : " + angle.ToString() + ".";
+			character.GetComponentInChildren<charEvent>().speakSomething("两选中直线的夹角为\n" + angle.ToString());
         }
         else
         {
-            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "You must select two lines before calculate the angle between line and line.";
+            //GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "You must select two lines before calculate the angle between line and line.";
+			character.GetComponentInChildren<charEvent>().speakSomething("请先选择两条直线");
         }
     }
 
     public void selectLPAngle()
     {
-        operationMenu.SetActive(false);
-        cancelButton.SetActive(false);
-        infoMenu.SetActive(true);
+        //operationMenu.SetActive(false);
+        //cancelButton.SetActive(false);
+        //infoMenu.SetActive(true);
         int linecnt = GlobalData.selectedLine.Count;
         int planecnt = GlobalData.selectedPlane.Count;
         if (linecnt == 1&&planecnt==1)
@@ -505,30 +518,34 @@ public class UIScript : MonoBehaviour {
             Vector3[] line = GlobalData.selectedLine[0];
             Vector3[] plane = GlobalData.selectedPlane[0];
             float angle = MathCalculate.lpAngle(line, plane);
-            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Angle of the selected line and plane is : " + angle.ToString() + ".";
+            //GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Angle of the selected line and plane is : " + angle.ToString() + ".";
+			character.GetComponentInChildren<charEvent>().speakSomething("选中直线与平面夹角为\n" + angle.ToString());
         }
         else
         {
-            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "You must select a line and a plane before calculate the angle between line and plane.";
+            //GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "You must select a line and a plane before calculate the angle between line and plane.";
+			character.GetComponentInChildren<charEvent>().speakSomething("请先选中直线与平面");
         }
     }
 
     public void selectPPAngle()
     {
-        operationMenu.SetActive(false);
-        cancelButton.SetActive(false);
-        infoMenu.SetActive(true);
+        //operationMenu.SetActive(false);
+        //cancelButton.SetActive(false);
+        //infoMenu.SetActive(true);
         int planecnt = GlobalData.selectedPlane.Count;
         if (planecnt == 2)
         {
             Vector3[] plane1 = GlobalData.selectedPlane[0];
             Vector3[] plane2 = GlobalData.selectedPlane[1];
             float angle = MathCalculate.llAngle(plane1, plane2);
-            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Angle of the two selected planes is : " + angle.ToString() + ".";
+            //GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Angle of the two selected planes is : " + angle.ToString() + ".";
+			character.GetComponentInChildren<charEvent>().speakSomething("选中面面夹角为\n" + angle.ToString());
         }
         else
         {
-            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "You must select two planes before calculate the angle between plane and plane.";
+            //GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "You must select two planes before calculate the angle between plane and plane.";
+			character.GetComponentInChildren<charEvent>().speakSomething("请先选择两平面");
         }
     }
 

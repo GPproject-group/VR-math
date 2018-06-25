@@ -155,6 +155,13 @@ public class charEvent : MonoBehaviour {
 		Invoke ("hideDialog", 1);
 	}
 
+	public void speakSomething(string str){
+		Debug.Log ("in speak");
+		showDialog ();
+		dialog.GetComponentInChildren<Text> ().text = str;
+		Invoke ("hideDialog", 1);
+	}
+
 	public void hideDialog(){
 		dialog.SetActive (false);
 	}
