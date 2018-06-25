@@ -19,6 +19,10 @@
         public bool flag;
         private GameObject vertexObj;
 
+        public Material clipMat;
+
+        private List<Vector3> clipPlaneV=new List<Vector3>();
+
         //x0x+y0y+z0z-x0x1-y0y1-z0z1=0      n=(x0,y0,z0)    p=(x1,y1,z1)
 
         public override void StartUsing(VRTK_InteractUse usingObject)
@@ -78,6 +82,7 @@
                     m_ClipPlaneNormal = Vector3.Cross(touchBeganPoint_local - controllerPoint_local, touchBeganPoint_local - touchEndPoint_local).normalized;
                     m_ClipPlanePoint = touchBeganPoint_local;
                     ClipMesh();
+                    clipPlaneV.Clear();
                     foreach(GameObject model in createModel.modelList)
                     {
                         model.GetComponent<TouchToPlane>().flag = false;
@@ -139,6 +144,7 @@
                 {
                     //求得0-1与切平面的交点
                     Vector3 newVertice01 = GetLinePlaneCrossPoint(trianglePointCoord0, trianglePointCoord1);
+                    clipPlaneV.Add(newVertice01);
                     int index01 = IsContainsVertice(verticeList, newVertice01);
                     if (index01 == -1 || !m_IsClearSamePoint)
                     {
@@ -178,6 +184,7 @@
 
                     //求得1-2与切平面的交点
                     Vector3 newVertice12 = GetLinePlaneCrossPoint(trianglePointCoord1, trianglePointCoord2);
+                    clipPlaneV.Add(newVertice12);
                     int index12 = IsContainsVertice(verticeList, newVertice12);
                     if (index12 == -1 || !m_IsClearSamePoint)
                     {
@@ -233,6 +240,7 @@
                 {
                     //求得1-2与切平面的交点
                     Vector3 newVertice12 = GetLinePlaneCrossPoint(trianglePointCoord1, trianglePointCoord2);
+                    clipPlaneV.Add(newVertice12);
                     int index12 = IsContainsVertice(verticeList, newVertice12);
                     if (index12 == -1 || !m_IsClearSamePoint)
                     {
@@ -271,6 +279,7 @@
                     }
                     //求得0-2与切平面的交点
                     Vector3 newVertice02 = GetLinePlaneCrossPoint(trianglePointCoord0, trianglePointCoord2);
+                    clipPlaneV.Add(newVertice02);
                     int index02 = IsContainsVertice(verticeList, newVertice02);
                     if (index02 == -1 || !m_IsClearSamePoint)
                     {
@@ -329,6 +338,7 @@
                 {
                     //求得0-1与切平面的交点
                     Vector3 newVertice01 = GetLinePlaneCrossPoint(trianglePointCoord0, trianglePointCoord1);
+                    clipPlaneV.Add(newVertice01);
                     int index01 = IsContainsVertice(verticeList, newVertice01);
                     if (index01 == -1 || !m_IsClearSamePoint)
                     {
@@ -367,6 +377,7 @@
                     }
                     //求得0-2与切平面的交点
                     Vector3 newVertice02 = GetLinePlaneCrossPoint(trianglePointCoord0, trianglePointCoord2);
+                    clipPlaneV.Add(newVertice02);
                     int index02 = IsContainsVertice(verticeList, newVertice02);
                     if (index02 == -1 || !m_IsClearSamePoint)
                     {
@@ -522,6 +533,35 @@
                 }
             }
             SortAngleList.Sort();
+            //切割面
+            GameObject clipPlane = new GameObject("clip plane");
+            clipPlane.AddComponent<MeshFilter>();
+            clipPlane.AddComponent<MeshRenderer>();
+
+            MeshFilter filter = clipPlane.GetComponent<MeshFilter>();
+            Mesh mesh = new Mesh();
+            filter.mesh = mesh;
+            clipPlane.GetComponent<MeshRenderer>().material = clipMat;
+
+            Vector3[] myVertices = clipPlaneV.ToArray();
+            Vector2[] myUV = new Vector2[myVertices.Length];
+
+            int[] myTriangle = new int[(myVertices.Length - 2) * 3];
+            for (int i = 0; i <= myTriangle.Length - 3; i = i + 3)
+            {
+                myTriangle[i] = 0;
+                myTriangle[i + 1] = i/3 + 1;
+                myTriangle[i + 2] = i/3 + 2;
+            }
+            // 0:0 1 2  3:0 2 3 6:0 3 4
+
+            mesh.vertices = myVertices;
+            mesh.triangles = myTriangle;
+//            mesh.uv = myUV;
+            mesh.RecalculateBounds();
+            mesh.RecalculateNormals();
+            mesh.RecalculateTangents();
+
             //缝合切口
             for (int verticeIndex = 0; verticeIndex < SortAngleList.Count - 1;)
             {
