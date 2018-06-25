@@ -443,15 +443,84 @@ public class UIScript : MonoBehaviour {
 
     public void selectMidpoint()
     {
+        if (GlobalData.selectedVertex.Count == 2)
+        {
+            operationMenu.SetActive(false);
+            cancelButton.SetActive(false);
+            initMenu.SetActive(true);
+            int cnt = initMenu.transform.childCount;
+            for (int i = 0; i < cnt; i++)
+            {
+                Transform btn = initMenu.transform.GetChild(i);
+                btn.transform.localScale = Vector3.zero;
+                btn.DOScale(Vector3.one, 0.3f).SetDelay(i * 0.1f);
+            }
+        }
+        else
+        {
+            operationMenu.SetActive(false);
+            cancelButton.SetActive(false);
+            infoMenu.SetActive(true);
+            int cnt = initMenu.transform.childCount;
+            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "You must select two points before select midpoint.";
+        }   
+    }
+
+    public void selectLLAngle()
+    {
         operationMenu.SetActive(false);
         cancelButton.SetActive(false);
-        initMenu.SetActive(true);
-        int cnt = initMenu.transform.childCount;
-        for (int i = 0; i < cnt; i++)
+        infoMenu.SetActive(true);
+        int linecnt = GlobalData.selectedLine.Count;
+        if (linecnt == 2)
         {
-            Transform btn = initMenu.transform.GetChild(i);
-            btn.transform.localScale = Vector3.zero;
-            btn.DOScale(Vector3.one, 0.3f).SetDelay(i * 0.1f);
+            Vector3[] line1 = GlobalData.selectedLine[0];
+            Vector3[] line2 = GlobalData.selectedLine[1];
+            float angle = MathCalculate.llAngle(line1, line2);
+            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Angle of the two selected lines is : " + angle.ToString() + ".";
+        }
+        else
+        {
+            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "You must select two lines before calculate the angle between line and line.";
+        }
+    }
+
+    public void selectLPAngle()
+    {
+        operationMenu.SetActive(false);
+        cancelButton.SetActive(false);
+        infoMenu.SetActive(true);
+        int linecnt = GlobalData.selectedLine.Count;
+        int planecnt = GlobalData.selectedPlane.Count;
+        if (linecnt == 1&&planecnt==1)
+        {
+            Vector3[] line = GlobalData.selectedLine[0];
+            Vector3[] plane = GlobalData.selectedPlane[0];
+            float angle = MathCalculate.lpAngle(line, plane);
+            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Angle of the selected line and plane is : " + angle.ToString() + ".";
+        }
+        else
+        {
+            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "You must select a line and a plane before calculate the angle between line and plane.";
+        }
+    }
+
+    public void selectPPAngle()
+    {
+        operationMenu.SetActive(false);
+        cancelButton.SetActive(false);
+        infoMenu.SetActive(true);
+        int planecnt = GlobalData.selectedPlane.Count;
+        if (planecnt == 2)
+        {
+            Vector3[] plane1 = GlobalData.selectedPlane[0];
+            Vector3[] plane2 = GlobalData.selectedPlane[1];
+            float angle = MathCalculate.llAngle(plane1, plane2);
+            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Angle of the two selected planes is : " + angle.ToString() + ".";
+        }
+        else
+        {
+            GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "You must select two planes before calculate the angle between plane and plane.";
         }
     }
 
