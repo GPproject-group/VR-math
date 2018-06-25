@@ -17,12 +17,9 @@ public class createModel : MonoBehaviour {
     private Rigidbody rigid;
     private VRTK.Examples.TouchToPlane vrtkTouch;
     //vertex的组件
-    private ChangeMaterialScript chaMatScr;
     private VRTK.Examples.SelectObjectScript selObjSrc;
     //两者的公用组件
     public Material mat;
-    public Material matSelect;
-    public Material matDefault;
     public Material matClip;
     public GameObject controRight;
 
@@ -120,16 +117,11 @@ public class createModel : MonoBehaviour {
             point.tag = "vertex";
 
             point.AddComponent<SphereCollider>();
-            point.AddComponent<ChangeMaterialScript>();
             point.AddComponent<VRTK.Examples.SelectObjectScript>();
             
             sphereCol = point.GetComponent<SphereCollider>();
-            sphereCol.isTrigger = false;
+            sphereCol.isTrigger = true;
             sphereCol.radius = 0.1f;
-
-            chaMatScr = point.GetComponent<ChangeMaterialScript>();
-            chaMatScr.selectedMaterial = matSelect;
-            chaMatScr.defaultMaterial = matDefault;
 
             selObjSrc = point.GetComponent<VRTK.Examples.SelectObjectScript>();
             selObjSrc.holdButtonToGrab = false;
@@ -257,16 +249,11 @@ public class createModel : MonoBehaviour {
 
             point.tag = "vertex";
             point.AddComponent<SphereCollider>();
-            point.AddComponent<ChangeMaterialScript>();
             point.AddComponent<VRTK.Examples.SelectObjectScript>();
 
             sphereCol = point.GetComponent<SphereCollider>();
-            sphereCol.isTrigger = false;
+            sphereCol.isTrigger = true;
             sphereCol.radius = 0.1f;
-
-            chaMatScr = point.GetComponent<ChangeMaterialScript>();
-            chaMatScr.selectedMaterial = matSelect;
-            chaMatScr.defaultMaterial = matDefault;
 
             selObjSrc = point.GetComponent<VRTK.Examples.SelectObjectScript>();
             selObjSrc.holdButtonToGrab = false;
@@ -398,11 +385,10 @@ public class createModel : MonoBehaviour {
 
             point.tag = "vertex";
             point.AddComponent<SphereCollider>();
-            point.AddComponent<ChangeMaterialScript>();
             point.AddComponent<VRTK.Examples.SelectObjectScript>();
 
             sphereCol = point.GetComponent<SphereCollider>();
-            sphereCol.isTrigger = false;
+            sphereCol.isTrigger = true;
             sphereCol.radius = 0.1f;
 
 
@@ -411,10 +397,6 @@ public class createModel : MonoBehaviour {
             selObjSrc.isUsable = true;
             selObjSrc.pointerActivatesUseAction = true;
             selObjSrc.controllerRight = controRight;
-            
-            chaMatScr = point.GetComponent<ChangeMaterialScript>();
-            chaMatScr.selectedMaterial = matSelect;
-            chaMatScr.defaultMaterial = matDefault;
 
             GameObject effect = (GameObject)Instantiate(Resources.Load("Prefabs/MagicSphereBlue"));
             effect.transform.parent = point.transform;
@@ -644,16 +626,11 @@ public class createModel : MonoBehaviour {
 
             point.tag = "vertex";
             point.AddComponent<SphereCollider>();
-            point.AddComponent<ChangeMaterialScript>();
             point.AddComponent<VRTK.Examples.SelectObjectScript>();
 
             sphereCol = point.GetComponent<SphereCollider>();
-            sphereCol.isTrigger = false;
+            sphereCol.isTrigger = true;
             sphereCol.radius = 0.1f;
-
-            chaMatScr = point.GetComponent<ChangeMaterialScript>();
-            chaMatScr.selectedMaterial = matSelect;
-            chaMatScr.defaultMaterial = matDefault;
 
             selObjSrc = point.GetComponent<VRTK.Examples.SelectObjectScript>();
             selObjSrc.holdButtonToGrab = false;
@@ -893,16 +870,11 @@ public class createModel : MonoBehaviour {
 
             point.tag = "vertex";
             point.AddComponent<SphereCollider>();
-            point.AddComponent<ChangeMaterialScript>();
             point.AddComponent<VRTK.Examples.SelectObjectScript>();
 
             sphereCol = point.GetComponent<SphereCollider>();
-            sphereCol.isTrigger = false;
+            sphereCol.isTrigger = true;
             sphereCol.radius = 0.1f;
-
-            chaMatScr = point.GetComponent<ChangeMaterialScript>();
-            chaMatScr.selectedMaterial = matSelect;
-            chaMatScr.defaultMaterial = matDefault;
 
             selObjSrc = point.GetComponent<VRTK.Examples.SelectObjectScript>();
             selObjSrc.holdButtonToGrab = false;
@@ -1139,16 +1111,11 @@ public class createModel : MonoBehaviour {
 
             point.tag = "vertex";
             point.AddComponent<SphereCollider>();
-            point.AddComponent<ChangeMaterialScript>();
             point.AddComponent<VRTK.Examples.SelectObjectScript>();
 
             sphereCol = point.GetComponent<SphereCollider>();
-            sphereCol.isTrigger = false;
+            sphereCol.isTrigger = true;
             sphereCol.radius = 0.1f;
-
-            chaMatScr = point.GetComponent<ChangeMaterialScript>();
-            chaMatScr.selectedMaterial = matSelect;
-            chaMatScr.defaultMaterial = matDefault;
 
             selObjSrc = point.GetComponent<VRTK.Examples.SelectObjectScript>();
             selObjSrc.holdButtonToGrab = false;
@@ -1256,17 +1223,12 @@ public class createModel : MonoBehaviour {
 
         point.tag = "vertex";
         point.AddComponent<SphereCollider>();
-        point.AddComponent<ChangeMaterialScript>();
         point.AddComponent<VRTK.Examples.SelectObjectScript>();
 
         sphereCol = point.GetComponent<SphereCollider>();
-        sphereCol.isTrigger = false;
+        sphereCol.isTrigger = true;
         sphereCol.radius = 0.1f;
-
-        chaMatScr = point.GetComponent<ChangeMaterialScript>();
-        chaMatScr.selectedMaterial = matSelect;
-        chaMatScr.defaultMaterial = matDefault;
-
+        
         selObjSrc = point.GetComponent<VRTK.Examples.SelectObjectScript>();
         selObjSrc.holdButtonToGrab = false;
         selObjSrc.isUsable = true;
