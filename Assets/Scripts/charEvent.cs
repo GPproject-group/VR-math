@@ -7,10 +7,11 @@ public class charEvent : MonoBehaviour {
 
 	public int mode = 0;
 	public GameObject dialog;
+	public int isClip;
 
 	// Use this for initialization
 	void Start () {
-		
+		isClip = 0;
 	}
 	
 	// Update is called once per frame
@@ -25,6 +26,9 @@ public class charEvent : MonoBehaviour {
 	}
 
 	public void btnHightlight(GameObject btn){
+		if (isClip == 1) {
+			return;
+		}
 		showDialog ();
 		string name = btn.name;
 
@@ -73,6 +77,9 @@ public class charEvent : MonoBehaviour {
 			break;
 		case "ImportModels":
 			dialog.GetComponentInChildren<Text> ().text = "导入外置模型";
+			break;
+		case "Reset":
+			dialog.GetComponentInChildren<Text> ().text = "清空所有模型";
 			break;
 
 		//function menu
@@ -148,7 +155,7 @@ public class charEvent : MonoBehaviour {
 			dialog.GetComponentInChildren<Text> ().text = "输入过小\n请输入正整数";
 			break;
 		case 3:
-			dialog.GetComponentInChildren<Text> ().text = "函数生成成功！";
+			dialog.GetComponentInChildren<Text> ().text = "生成成功！";
 			break;
 		}
 
@@ -160,6 +167,19 @@ public class charEvent : MonoBehaviour {
 		showDialog ();
 		dialog.GetComponentInChildren<Text> ().text = str;
 		Invoke ("hideDialog", 1);
+	}
+
+	public void clip(){
+		isClip = 1;
+		showDialog ();
+		dialog.GetComponentInChildren<Text> ().text = "请使用射线切割";
+	}
+
+	public void unHighlight(){
+		if (isClip == 1) {
+			return;
+		}
+		hideDialog ();
 	}
 
 	public void hideDialog(){

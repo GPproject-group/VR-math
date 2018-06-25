@@ -457,6 +457,7 @@ public class UIScript : MonoBehaviour {
         {
             model.GetComponent<VRTK.Examples.TouchToPlane>().flag = true;
         }
+		//character.GetComponent<charEvent> ().speakSomething ("使用射线切割");
     }
 
     public void selectMidpoint()
@@ -481,7 +482,7 @@ public class UIScript : MonoBehaviour {
             //infoMenu.SetActive(true);
             int cnt = initMenu.transform.childCount;
             //GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "You must select two points before select midpoint.";
-			character.GetComponentInChildren<charEvent>().speakSomething("请先选择两个点");
+			character.GetComponent<charEvent>().speakSomething("请先选择两个点");
         }   
     }
 
