@@ -2889,7 +2889,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2b65ba8f77c8384d8d74788550ff726, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mat: {fileID: 0}
+  mat: {fileID: 2100000, guid: 483110a781f98ce488273b51c976bcdf, type: 2}
   controllerRight: {fileID: 1037951822}
   character: {fileID: 1349112709}
 --- !u!4 &366647792
