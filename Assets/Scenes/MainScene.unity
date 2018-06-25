@@ -12329,7 +12329,7 @@ MonoBehaviour:
   wrongInput1: {fileID: 1778589252}
   wrongInput2: {fileID: 905179837}
   charMode: 0
-  character: {fileID: 0}
+  character: {fileID: 1349112709}
 --- !u!114 &1423976874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13322,6 +13322,7 @@ MonoBehaviour:
   mat: {fileID: 2100000, guid: ba38a4c61f76c194fb0b416b1825c6b0, type: 2}
   matSelect: {fileID: 2100000, guid: a1f01241e6426994da8486ccdcf7b14e, type: 2}
   matDefault: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  matClip: {fileID: 0}
   controRight: {fileID: 1037951822}
 --- !u!114 &1489157802
 MonoBehaviour:
