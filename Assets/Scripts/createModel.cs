@@ -23,6 +23,7 @@ public class createModel : MonoBehaviour {
     public Material mat;
     public Material matSelect;
     public Material matDefault;
+    public Material matClip;
     public GameObject controRight;
 
 
@@ -167,6 +168,7 @@ public class createModel : MonoBehaviour {
         vrtkTouch.isUsable = true;
         vrtkTouch.pointerActivatesUseAction = true;
         vrtkTouch.controllerRight = controRight;
+        vrtkTouch.clipMat = matClip;
     }
     //四边形
     /*
@@ -305,6 +307,7 @@ public class createModel : MonoBehaviour {
         vrtkTouch.isUsable = true;
         vrtkTouch.pointerActivatesUseAction = true;
         vrtkTouch.controllerRight = controRight;
+        vrtkTouch.clipMat = matClip;
     }
     //圆锥
     /*
@@ -442,6 +445,7 @@ public class createModel : MonoBehaviour {
         vrtkTouch.isUsable = true;
         vrtkTouch.pointerActivatesUseAction = true;
         vrtkTouch.controllerRight = controRight;
+        vrtkTouch.clipMat = matClip;
     }
     //棱锥
     /*
@@ -686,6 +690,7 @@ public class createModel : MonoBehaviour {
         vrtkTouch.isUsable = true;
         vrtkTouch.pointerActivatesUseAction = true;
         vrtkTouch.controllerRight = controRight;
+        vrtkTouch.clipMat = matClip;
     }
     //棱柱
     /*
@@ -935,6 +940,7 @@ public class createModel : MonoBehaviour {
         vrtkTouch.isUsable = true;
         vrtkTouch.pointerActivatesUseAction = true;
         vrtkTouch.controllerRight = controRight;
+        vrtkTouch.clipMat = matClip;
     }
     //圆柱
     /*
@@ -1180,6 +1186,7 @@ public class createModel : MonoBehaviour {
         vrtkTouch.isUsable = true;
         vrtkTouch.pointerActivatesUseAction = true;
         vrtkTouch.controllerRight = controRight;
+        vrtkTouch.clipMat = matClip;
     }
 
     //球体
@@ -1293,6 +1300,7 @@ public class createModel : MonoBehaviour {
         vrtkTouch.isUsable = true;
         vrtkTouch.pointerActivatesUseAction = true;
         vrtkTouch.controllerRight = controRight;
+        vrtkTouch.clipMat = matClip;
     }
     private static void CreateOctahedron(Vector3[] vertices, int[] triangles, int resolution)
     {
