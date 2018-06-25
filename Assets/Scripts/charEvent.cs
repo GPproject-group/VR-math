@@ -5,20 +5,58 @@ using UnityEngine.UI;
 
 public class charEvent : MonoBehaviour {
 
-	public int mode = 0;
+	public int mode;
 	public GameObject dialog;
 	public int isClip;
+	private int isRun;
 
 	// Use this for initialization
 	void Start () {
 		isClip = 0;
+		mode = 0;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		switch (mode) {
+		case 1:
+			Debug.Log ("jaha");
+			runAni (1);
+			break;
+		case 2:
+			runAni (2);
+			break;
+		case 3:
+			runAni (3);
+			break;
+		}
+	}
+
+	private void reset(){
 		GameObject person = GameObject.Find ("MaleFreeSimpleMovement1");
 		Animator ani = person.GetComponent<Animator> ();
-		ani.SetInteger ("mode", mode);
+		mode = 0;
+		ani.SetInteger ("mode", 0);
+	}
+
+	private void runAni(int modeNo){
+		GameObject person = GameObject.Find ("MaleFreeSimpleMovement1");
+		Animator ani = person.GetComponent<Animator> ();
+		switch (modeNo) {
+		case 1:
+			ani.SetInteger ("mode", 1);
+			Debug.Log ("mie");
+			Invoke ("reset", 3);
+			break;
+		case 2:
+			ani.SetInteger ("mode", 2);
+			Invoke ("reset", 3);
+			break;
+		case 3:
+			ani.SetInteger ("mode", 3);
+			Invoke ("reset", 3);
+			break;
+		}
 	}
 
 	private void showDialog(){
@@ -145,17 +183,21 @@ public class charEvent : MonoBehaviour {
 		case 0:
 			Debug.Log ("input is not a float");
 			dialog.GetComponentInChildren<Text> ().text = "请输入一个实数";
+			mode = 2;
 			break;
 		case 1:
 			Debug.Log ("too large");
 			dialog.GetComponentInChildren<Text> ().text = "输入过大\n输入请小于20";
+			mode = 2;
 			break;
 		case 2:
 			Debug.Log ("too small");
 			dialog.GetComponentInChildren<Text> ().text = "输入过小\n请输入正整数";
+			mode = 2;
 			break;
 		case 3:
 			dialog.GetComponentInChildren<Text> ().text = "生成成功！";
+			mode = 1;
 			break;
 		}
 
