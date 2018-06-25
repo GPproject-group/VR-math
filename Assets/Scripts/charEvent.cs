@@ -131,6 +131,30 @@ public class charEvent : MonoBehaviour {
 		}
 	}
 
+	public void confirmChar(int errorno){
+		showDialog ();
+
+		switch (errorno) {
+		case 0:
+			Debug.Log ("input is not a float");
+			dialog.GetComponentInChildren<Text> ().text = "请输入一个实数";
+			break;
+		case 1:
+			Debug.Log ("too large");
+			dialog.GetComponentInChildren<Text> ().text = "输入过大\n输入请小于20";
+			break;
+		case 2:
+			Debug.Log ("too small");
+			dialog.GetComponentInChildren<Text> ().text = "输入过小\n请输入正整数";
+			break;
+		case 3:
+			dialog.GetComponentInChildren<Text> ().text = "函数生成成功！";
+			break;
+		}
+
+		Invoke ("hideDialog", 1);
+	}
+
 	public void hideDialog(){
 		dialog.SetActive (false);
 	}
