@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571334, b: 0.3069219, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -3083,12 +3083,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6be535222e99d40c7b43602cec664083, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  path: Assets/Resources/models
-  files: []
-  importBtn: {fileID: 0}
-  parent: {fileID: 0}
-  controllerRight: {fileID: 0}
-  scale: 
 --- !u!114 &387030285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12573,6 +12567,7 @@ MonoBehaviour:
   wrongInput2: {fileID: 905179837}
   charMode: 0
   character: {fileID: 1349112709}
+  controllerRight: {fileID: 1037951822}
 --- !u!114 &1423976874
 MonoBehaviour:
   m_ObjectHideFlags: 0
