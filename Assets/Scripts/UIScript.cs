@@ -22,6 +22,8 @@ public class UIScript : MonoBehaviour {
 	public GameObject wrongInput0;
 	public GameObject wrongInput1;
 	public GameObject wrongInput2;
+
+	public int charMode;
 	// Use this for initialization
 	void Start () {
 		

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class SimpleCharacterControl : MonoBehaviour {
 
+	public int mode;
+
     private enum ControlMode
     {
         Tank,
@@ -88,7 +90,7 @@ public class SimpleCharacterControl : MonoBehaviour {
     }
 
 	void Update () {
-        m_animator.SetBool("Grounded", m_isGrounded);
+        /*m_animator.SetBool("Grounded", m_isGrounded);
 
         switch(m_controlMode)
         {
@@ -105,12 +107,38 @@ public class SimpleCharacterControl : MonoBehaviour {
                 break;
         }
 
-        m_wasGrounded = m_isGrounded;
+        m_wasGrounded = m_isGrounded;*/
+		switch (mode) {
+
+		//init menu
+		case 1:
+			Debug.Log ("get into init menu");
+			break;
+		
+		//model menu
+		case 2:
+			Debug.Log ("get into model menu");
+			break;
+
+		//function menu
+		case 3:
+			Debug.Log ("get into function menu");
+			break;
+
+		//import object menu
+		case 4:
+			Debug.Log ("get into import object menu");
+			break;
+		
+		default:
+			Debug.Log ("default");
+			break;
+		}
     }
 
     private void TankUpdate()
     {
-        float v = Input.GetAxis("Vertical");
+        /*float v = Input.GetAxis("Vertical");
         float h = Input.GetAxis("Horizontal");
 
         bool walk = Input.GetKey(KeyCode.LeftShift);
@@ -129,14 +157,14 @@ public class SimpleCharacterControl : MonoBehaviour {
         transform.position += transform.forward * m_currentV * m_moveSpeed * Time.deltaTime;
         transform.Rotate(0, m_currentH * m_turnSpeed * Time.deltaTime, 0);
 
-        m_animator.SetFloat("MoveSpeed", m_currentV);
+        m_animator.SetFloat("MoveSpeed", m_currentV);*/
 
         JumpingAndLanding();
     }
 
     private void DirectUpdate()
     {
-        float v = Input.GetAxis("Vertical");
+        /*float v = Input.GetAxis("Vertical");
         float h = Input.GetAxis("Horizontal");
 
         Transform camera = Camera.main.transform;
@@ -164,14 +192,14 @@ public class SimpleCharacterControl : MonoBehaviour {
             transform.position += m_currentDirection * m_moveSpeed * Time.deltaTime;
 
             m_animator.SetFloat("MoveSpeed", direction.magnitude);
-        }
+        }*/
 
         JumpingAndLanding();
     }
 
     private void JumpingAndLanding()
     {
-        bool jumpCooldownOver = (Time.time - m_jumpTimeStamp) >= m_minJumpInterval;
+        /*bool jumpCooldownOver = (Time.time - m_jumpTimeStamp) >= m_minJumpInterval;
 
         if (jumpCooldownOver && m_isGrounded && Input.GetKey(KeyCode.Space))
         {
@@ -187,6 +215,6 @@ public class SimpleCharacterControl : MonoBehaviour {
         if (!m_isGrounded && m_wasGrounded)
         {
             m_animator.SetTrigger("Jump");
-        }
+        }*/
     }
 }
