@@ -13,6 +13,8 @@ public class changeVertexsPoi : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         this.gameObject.transform.position = modelObj.transform.position;
-	}
+        this.gameObject.transform.rotation = modelObj.transform.rotation;
+        this.gameObject.transform.localScale = modelObj.transform.localScale;
+    }
 
 }

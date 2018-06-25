@@ -143,6 +143,8 @@ public class createModel : MonoBehaviour {
         vertexObj.AddComponent<changeVertexsPoi>();
         vertexObj.GetComponent<changeVertexsPoi>().modelObj = newTriangle;
 
+        //缩放模型
+        newTriangle.transform.localScale = new Vector3(0.3f,0.3f,0.3f);
         //增加tag
         newTriangle.tag = "model";
         modelList.Add(newTriangle);
@@ -277,6 +279,9 @@ public class createModel : MonoBehaviour {
         vertexObj.AddComponent<changeVertexsPoi>();
         vertexObj.GetComponent<changeVertexsPoi>().modelObj = newPlane;
 
+
+        //缩放模型
+        newPlane.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
         //增加tag
         newPlane.tag = "model";
         modelList.Add(newPlane);
