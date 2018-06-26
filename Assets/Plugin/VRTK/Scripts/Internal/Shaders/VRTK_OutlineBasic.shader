@@ -4,6 +4,8 @@
     {
         _OutlineColor("Outline Color", Color) = (1, 0, 0, 1)
         _Thickness("Thickness", float) = 1
+		_MainTex("Main Tex", 2D) = "white" {}
+		_AlphaScale("Alpha Scale", Range(0,1)) = 1
     }
 
     SubShader
@@ -99,6 +101,106 @@
                 }
             ENDCG
         }
-    }
+		Pass
+		{
+			Tags{ "LightMode" = "ForwardBase" }
+			ZWrite Off
+			Blend SrcAlpha OneMinusSrcAlpha
+			Cull Back
+			CGPROGRAM
+			#pragma vertex vert
+			#pragma fragment frag
+			#include "UnityCG.cginc"
+			sampler2D _MainTex;
+			float4 _MainTex_ST;
+			float _AlphaScale;
+			struct a2v
+			{
+				float4 vertex : POSITION;
+				float3 normal : NORMAL;
+				// 将模型的第一组纹理坐标存储到该变量中
+				float3 texcoord : TEXCOORD0;
+			};
+			struct v2f
+			{
+				float4 pos : SV_POSITION;
+				float3 worldPos : TEXCOORD0;
+				float3 worldNormal : TEXCOORD1;
+				float2 uv : TEXCOORD2;
+			};
+			v2f vert(a2v v)
+			{
+				v2f o;
+				o.pos = UnityObjectToClipPos(v.vertex);
+				// 模型坐标顶点转换世界坐标顶点
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex);
+				// 模型坐标法线转换世界坐标法线
+				o.worldNormal = UnityObjectToWorldNormal(v.normal);
+				// 对顶点纹理坐标进行变换，最终得到uv坐标。
+				// 方法原理 o.uv = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
+				//_MainTex_ST 是纹理的属性值，写法是固定的为 纹理名+_ST
+				o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
+				return o;
+			}
+			fixed4 frag(v2f i) : SV_Target
+			{
+
+				// 对纹理进行采样，返回为计算得到的纹素值，与_Color的乘积作为反射率
+				fixed3 albedo = tex2D(_MainTex, i.uv).rgb;
+				return fixed4(albedo, _AlphaScale);
+			}
+			ENDCG
+		}
+			Pass
+			{
+				Tags{ "LightMode" = "ForwardBase" }
+				ZWrite Off
+				Blend SrcAlpha OneMinusSrcAlpha
+				Cull Off
+				CGPROGRAM
+				#pragma vertex vert
+				#pragma fragment frag
+				#include "UnityCG.cginc"
+				sampler2D _MainTex;
+				float4 _MainTex_ST;
+				float _AlphaScale;
+				struct a2v
+				{
+					float4 vertex : POSITION;
+					float3 normal : NORMAL;
+					// 将模型的第一组纹理坐标存储到该变量中
+					float3 texcoord : TEXCOORD0;
+				};
+				struct v2f
+				{
+					float4 pos : SV_POSITION;
+					float3 worldPos : TEXCOORD0;
+					float3 worldNormal : TEXCOORD1;
+					float2 uv : TEXCOORD2;
+				};
+				v2f vert(a2v v)
+				{
+					v2f o;
+					o.pos = UnityObjectToClipPos(v.vertex);
+					// 模型坐标顶点转换世界坐标顶点
+					o.worldPos = mul(unity_ObjectToWorld, v.vertex);
+					// 模型坐标法线转换世界坐标法线
+					o.worldNormal = UnityObjectToWorldNormal(v.normal);
+					// 对顶点纹理坐标进行变换，最终得到uv坐标。
+					// 方法原理 o.uv = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
+					//_MainTex_ST 是纹理的属性值，写法是固定的为 纹理名+_ST
+					o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
+					return o;
+				}
+				fixed4 frag(v2f i) : SV_Target
+				{
+
+					// 对纹理进行采样，返回为计算得到的纹素值，与_Color的乘积作为反射率
+					fixed3 albedo = tex2D(_MainTex, i.uv).rgb;
+				return fixed4(albedo, _AlphaScale);
+				}
+					ENDCG
+				}
+		}
     FallBack "Diffuse"
 }

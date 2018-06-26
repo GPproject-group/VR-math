@@ -547,8 +547,11 @@
                 myVertices[i-verticeCount] = verticeList[i];
             }
             Vector2[] myUV = new Vector2[myVertices.Length];
-
-
+            for (int i = 0; i < myUV.Length; i++)
+            {
+                myUV[i] = new Vector2(0,0);
+                
+            }
             List<int> myTriangle = new List<int>();
             for (int i = 0; i < SortAngleList.Count - 1; i++)
             {
@@ -559,7 +562,6 @@
                 myTriangle.Add(SortAngleList[i].Index - verticeCount);
                 myTriangle.Add(0);              
             }
-
             mesh.vertices = myVertices;
             mesh.triangles = myTriangle.ToArray();
             mesh.uv = myUV;
@@ -579,10 +581,8 @@
                 triangles1.Add(SortAngleList[verticeIndex].Index);
                 triangles1.Add(SortAngleList[verticeIndex + 1].Index);
 
-
                 verticeIndex++;
             }
-
             mf.mesh.vertices = verticeList.ToArray();
             mf.mesh.triangles = triangles1.ToArray();
             if (uvList.Count > 0)
@@ -594,6 +594,10 @@
             if (triangles2.Count > 0)
             {
                 string newname = this.name+"(clip)";
+                GameObject.Find(this.name + "-vertex").name = this.name + "(clipori)-vertex";
+                this.name = this.name +"(clipori)";
+                
+                
                 GameObject newModel = new GameObject(newname);
                 GameObject newModelVertex = new GameObject(newname + "-vertex");
                 
@@ -615,7 +619,7 @@
                 rb.isKinematic = true;
                 mc.convex = true;
                 mc.sharedMesh = meshFilter.mesh;
-                mc.isTrigger = false;
+                mc.isTrigger = true;
                 ttp.isGrabbable = true;
                 ttp.isUsable = true;
                 ttp.pointerActivatesUseAction = true;

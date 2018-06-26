@@ -44,6 +44,11 @@
                     io.holdButtonToGrab = true;
                     io.isUsable = true;
                     io.pointerActivatesUseAction = true;
+
+                    foreach (GameObject model in createModel.modelList)
+                    {
+                        model.GetComponent<MeshCollider>().enabled = true;
+                    }
                 }
             }
         }

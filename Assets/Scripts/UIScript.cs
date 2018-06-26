@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using VRTK;
 
 public class UIScript : MonoBehaviour {
     public GameObject initMenu;
@@ -570,6 +571,8 @@ public class UIScript : MonoBehaviour {
             Destroy(model);
             Destroy(vertexObj);
         }
+        createModel.modelList.Clear();
+        GlobalData.clipPlane.Clear();
     }
 
     public void selectClipPlane()
@@ -591,6 +594,11 @@ public class UIScript : MonoBehaviour {
                 rb.isKinematic = true;
                 rb.useGravity = false;
                 clipPlane.AddComponent<MeshCollider>();
+                VRTK_InteractableObject io = clipPlane.GetComponent<VRTK_InteractableObject>();
+                if (io != null)
+                {
+                    Destroy(io);
+                }
                 VRTK.Examples.SelectClipPlaneScript scp = clipPlane.AddComponent<VRTK.Examples.SelectClipPlaneScript>();
                 scp.holdButtonToGrab = false;
                 scp.isUsable = true;
