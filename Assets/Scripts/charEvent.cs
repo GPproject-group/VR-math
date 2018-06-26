@@ -113,6 +113,9 @@ public class charEvent : MonoBehaviour {
 		case "Triangle":
 			dialog.GetComponentInChildren<Text> ().text = "创建三角形模型";
 			break;
+		case "Ellipsoid":
+			dialog.GetComponentInChildren<Text> ().text = "创建椭球模型";
+			break;
 		case "ImportModels":
 			dialog.GetComponentInChildren<Text> ().text = "导入外置模型";
 			break;
