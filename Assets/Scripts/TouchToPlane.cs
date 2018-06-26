@@ -5,6 +5,7 @@
 
     public class TouchToPlane : VRTK_InteractableObject
     {
+		public GameObject character;
         public GameObject controllerRight;
 
         private bool m_IsClearSamePoint = false;
@@ -54,6 +55,7 @@
 
         protected void Start()
         {
+			character = GameObject.Find("MaleFreeSimpleMovement1");
             vertexObj = GameObject.Find(this.name + "-vertex");
             if (flag)
             {
@@ -82,6 +84,10 @@
                     m_ClipPlaneNormal = Vector3.Cross(touchBeganPoint_local - controllerPoint_local, touchBeganPoint_local - touchEndPoint_local).normalized;
                     m_ClipPlanePoint = touchBeganPoint_local;
                     ClipMesh();
+
+					//end of clip
+					character.GetComponent<charEvent>().hideDialog();
+
                     clipPlaneV.Clear();
                     foreach(GameObject model in createModel.modelList)
                     {
@@ -535,6 +541,7 @@
             SortAngleList.Sort();
             //切割面
             GameObject clipPlane = new GameObject("clip plane");
+            clipPlane.transform.parent = GameObject.Find(this.name + "-vertex").transform;
             clipPlane.AddComponent<MeshFilter>();
             clipPlane.AddComponent<MeshRenderer>();
 
@@ -546,21 +553,22 @@
             Vector3[] myVertices = clipPlaneV.ToArray();
             Vector2[] myUV = new Vector2[myVertices.Length];
 
+
             int[] myTriangle = new int[(myVertices.Length - 2) * 3];
             for (int i = 0; i <= myTriangle.Length - 3; i = i + 3)
             {
                 myTriangle[i] = 0;
-                myTriangle[i + 1] = i/3 + 1;
-                myTriangle[i + 2] = i/3 + 2;
+                myTriangle[i + 1] = i / 3 + 1;
+                myTriangle[i + 2] = i / 3 + 2;
             }
-            // 0:0 1 2  3:0 2 3 6:0 3 4
 
             mesh.vertices = myVertices;
             mesh.triangles = myTriangle;
-//            mesh.uv = myUV;
+            mesh.uv = myUV;
             mesh.RecalculateBounds();
             mesh.RecalculateNormals();
             mesh.RecalculateTangents();
+            GlobalData.clipPlane.Add(clipPlane);
 
             //缝合切口
             for (int verticeIndex = 0; verticeIndex < SortAngleList.Count - 1;)
@@ -614,6 +622,7 @@
                 ttp.isUsable = true;
                 ttp.pointerActivatesUseAction = true;
                 ttp.controllerRight = controllerRight;
+                ttp.clipMat = clipMat;
 
                 changeVertexsPoi cv = newModelVertex.AddComponent<changeVertexsPoi>();
                 cv.modelObj = newModel;

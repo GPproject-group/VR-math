@@ -5,10 +5,11 @@ using UnityEngine;
 public class OperationScript : MonoBehaviour
 {
     private int mode;    //0:nothing 1:line  2:plane
-    private List<GameObject> lrobjList;
+    private  List<GameObject> lrobjList;
 
     public Material mat;
     public GameObject controllerRight;
+	public GameObject character;
     public void connectToLine()
     {
         mode = 1;
@@ -81,6 +82,15 @@ public class OperationScript : MonoBehaviour
         GlobalData.selectedPlane.Clear();
         GlobalData.selectedLine.Clear();
         GlobalData.selectedMidpoint.Clear();
+    }
+
+    public void destroyLr()
+    {
+        foreach (GameObject obj in lrobjList)
+        {
+            Destroy(obj);
+        }
+		character.GetComponent<charEvent> ().speakSomething ("模型已清空");
     }
 
     void Start()
