@@ -1264,6 +1264,96 @@ public class createModel : MonoBehaviour {
         vrtkTouch.controllerRight = controRight;
         vrtkTouch.clipMat = matClip;
     }
+    //椭球
+    public void createEllipsoid()
+    {
+        int subdivisions = 4;
+        float radius = 1;
+        num = showPoint.Count;
+        string objname = "Ellipsoid" + num;
+        GameObject newEllipsoid = new GameObject(objname);
+        newEllipsoid.AddComponent<MeshFilter>();
+        newEllipsoid.AddComponent<MeshRenderer>();
+        newEllipsoid.name = objname;
+        filter = newEllipsoid.GetComponent<MeshFilter>();
+        mesh = new Mesh();
+        filter.mesh = mesh;
+        newEllipsoid.GetComponent<MeshRenderer>().material = mat;
+        mesh.Clear();
+        int resolution = 1 << subdivisions;
+        Vector3[] vertices = new Vector3[(resolution + 1) * (resolution + 1) * 4 - 3 * (resolution * 2 + 1)];
+        int[] triangles = new int[(1 << (subdivisions * 2 + 3)) * 3];
+        CreateOctahedron(vertices, triangles, resolution);
+        Vector3[] Points = new Vector3[1];
+        Points[0] = new Vector3(0, 0, 0);
+        if (radius != 1f)
+        {
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                vertices[i] *= radius;
+            }
+        }
+        Vector3[] normals = new Vector3[vertices.Length];
+        Normalize(vertices, normals);
+
+        mesh.vertices = vertices;
+        mesh.triangles = triangles;
+        mesh.normals = normals;
+        showPoint.Add(objname, Points);
+        //定点设置
+        string vertexs = "Sphere" + num + "-vertex";
+        GameObject vertexObj = new GameObject(vertexs);
+        vertexObj.transform.position = newEllipsoid.transform.position;
+        string pointName = objname + "-Point1";
+        GameObject point = new GameObject(pointName);
+        point.transform.parent = vertexObj.transform;
+        point.transform.position = Points[0];
+
+        point.tag = "vertex";
+        point.AddComponent<SphereCollider>();
+        point.AddComponent<VRTK.Examples.SelectObjectScript>();
+
+        sphereCol = point.GetComponent<SphereCollider>();
+        sphereCol.isTrigger = true;
+        sphereCol.radius = 0.1f;
+
+        selObjSrc = point.GetComponent<VRTK.Examples.SelectObjectScript>();
+        selObjSrc.holdButtonToGrab = false;
+        selObjSrc.isUsable = true;
+        selObjSrc.pointerActivatesUseAction = true;
+        selObjSrc.controllerRight = controRight;
+
+        GameObject effect = (GameObject)Instantiate(Resources.Load("Prefabs/MagicSphereBlue"));
+        effect.transform.parent = point.transform;
+        effect.transform.localPosition = Vector3.zero;
+
+        vertexObj.AddComponent<changeVertexsPoi>();
+        vertexObj.GetComponent<changeVertexsPoi>().modelObj = newEllipsoid;
+        //增加tag
+        newEllipsoid.tag = "model";
+        modelList.Add(newEllipsoid);
+        //增加组件
+        newEllipsoid.AddComponent<Rigidbody>();
+        newEllipsoid.AddComponent<SphereCollider>();
+        newEllipsoid.AddComponent<VRTK.Examples.TouchToPlane>();
+        //更改属性
+        rigid = newEllipsoid.GetComponent<Rigidbody>();
+        rigid.useGravity = false;
+        rigid.isKinematic = true;
+
+        sphereCol = newEllipsoid.GetComponent<SphereCollider>();
+        sphereCol.center = newEllipsoid.transform.position;
+        sphereCol.radius = 1;
+
+        vrtkTouch = newEllipsoid.GetComponent<VRTK.Examples.TouchToPlane>();
+        vrtkTouch.isGrabbable = true;
+        vrtkTouch.isUsable = true;
+        vrtkTouch.pointerActivatesUseAction = true;
+        vrtkTouch.controllerRight = controRight;
+        vrtkTouch.clipMat = matClip;
+
+        newEllipsoid.transform.localScale = new Vector3(1,1,2);
+    }
     private static void CreateOctahedron(Vector3[] vertices, int[] triangles, int resolution)
     {
         int v = 0, vBottom = 0, t = 0;
