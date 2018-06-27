@@ -32,7 +32,6 @@ public class OperationScript : MonoBehaviour
             effect0.transform.parent = midpointObj.transform;
             effect0.transform.localPosition = Vector3.zero;
             midpointObj.AddComponent<SphereCollider>();
-            midpointObj.AddComponent<ChangeMaterialScript>();
             midpointObj.AddComponent<VRTK.Examples.SelectObjectScript>();
             SphereCollider sphereCol = midpointObj.GetComponent<SphereCollider>();
             sphereCol.isTrigger = false;
