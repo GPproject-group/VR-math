@@ -585,18 +585,141 @@
 
                 verticeIndex++;
             }
-            mf.mesh.vertices = verticeList.ToArray();
-            mf.mesh.triangles = triangles1.ToArray();
-            if (uvList.Count > 0)
-            {
-                mf.mesh.uv = uvList.ToArray();
-            }
-            mf.mesh.normals = normalList.ToArray();
-			this.GetComponent<MeshCollider>().sharedMesh = this.GetComponent<MeshFilter>().mesh;
-            this.GetComponent<MeshCollider>().isTrigger = true;
+            
             //分割模型
             if (triangles2.Count > 0)
             {
+
+                List<Vector3> vecticesList1 = new List<Vector3>();
+                List<Vector3> vecticesList2 = new List<Vector3>();
+                List<int> triangleList1 = new List<int>();
+                List<int> triangleList2 = new List<int>();
+                List<Vector3> normalList1 = new List<Vector3>();
+                List<Vector3> normalList2 = new List<Vector3>();
+                List<Vector2> uvList1 = new List<Vector2>();
+                List<Vector2> uvList2 = new List<Vector2>();
+
+                for(int i = 0; i < triangles1.Count-2; i+=3)
+                {
+                    Vector3 v1 = verticeList[triangles1[i]];
+                    Vector3 v2 = verticeList[triangles1[i+1]];
+                    Vector3 v3 = verticeList[triangles1[i+2]];
+
+                    Vector3 n1 = normalList[triangles1[i]];
+                    Vector3 n2 = normalList[triangles1[i + 1]];
+                    Vector3 n3 = normalList[triangles1[i + 2]];
+
+                    Vector3 uv1 = uvList[triangles1[i]];
+                    Vector3 uv2 = uvList[triangles1[i + 1]];
+                    Vector3 uv3 = uvList[triangles1[i + 2]];
+
+                    int v1index = IsContainsVertice(vecticesList1, v1);
+                    int v2index = IsContainsVertice(vecticesList1, v2);
+                    int v3index = IsContainsVertice(vecticesList1, v3);
+
+                    if (v1index < 0)
+                    {
+                        triangleList1.Add(vecticesList1.Count);
+                        vecticesList1.Add(v1);
+                        normalList1.Add(n1);
+                        uvList1.Add(uv1);                    
+                    }
+                    else
+                    {
+                        triangleList1.Add(v1index);
+                    }
+                    if (v2index < 0)
+                    {
+                        triangleList1.Add(vecticesList1.Count);
+                        vecticesList1.Add(v2);
+                        normalList1.Add(n2);
+                        uvList1.Add(uv2);
+                    }
+                    else
+                    {
+                        triangleList1.Add(v2index);
+                    }
+                    if (v3index < 0)
+                    {
+                        triangleList1.Add(vecticesList1.Count);
+                        vecticesList1.Add(v3);
+                        normalList1.Add(n3);
+                        uvList1.Add(uv3);
+                    }
+                    else
+                    {
+                        triangleList1.Add(v3index);
+                    }
+                }
+
+
+                for (int i = 0; i < triangles2.Count - 2; i += 3)
+                {
+                    Vector3 v1 = verticeList[triangles2[i]];
+                    Vector3 v2 = verticeList[triangles2[i + 1]];
+                    Vector3 v3 = verticeList[triangles2[i + 2]];
+
+                    Vector3 n1 = normalList[triangles2[i]];
+                    Vector3 n2 = normalList[triangles2[i + 1]];
+                    Vector3 n3 = normalList[triangles2[i + 2]];
+
+                    Vector3 uv1 = uvList[triangles2[i]];
+                    Vector3 uv2 = uvList[triangles2[i + 1]];
+                    Vector3 uv3 = uvList[triangles2[i + 2]];
+
+                    int v1index = IsContainsVertice(vecticesList2, v1);
+                    int v2index = IsContainsVertice(vecticesList2, v2);
+                    int v3index = IsContainsVertice(vecticesList2, v3);
+
+                    if (v1index < 0)
+                    {
+                        triangleList2.Add(vecticesList2.Count);
+                        vecticesList2.Add(v1);
+                        normalList2.Add(n1);
+                        uvList2.Add(uv1);
+                    }
+                    else
+                    {
+                        triangleList2.Add(v1index);
+                    }
+                    if (v2index < 0)
+                    {
+                        triangleList2.Add(vecticesList2.Count);
+                        vecticesList2.Add(v2);
+                        normalList2.Add(n2);
+                        uvList2.Add(uv2);
+                    }
+                    else
+                    {
+                        triangleList2.Add(v2index);
+                    }
+                    if (v3index < 0)
+                    {
+                        triangleList2.Add(vecticesList2.Count);
+                        vecticesList2.Add(v3);
+                        normalList2.Add(n3);
+                        uvList2.Add(uv3);
+                    }
+                    else
+                    {
+                        triangleList2.Add(v3index);
+                    }
+                }
+                Mesh mesh1 = new Mesh();
+                mesh1.vertices= vecticesList1.ToArray();
+                mesh1.triangles = triangleList1.ToArray();
+                if (uvList1.Count > 0)
+                {
+                    mesh1.uv = uvList1.ToArray();
+                }
+                mesh1.normals = normalList1.ToArray();
+                mf.mesh = mesh1;
+
+                this.GetComponent<MeshCollider>().sharedMesh = this.GetComponent<MeshFilter>().mesh;
+                this.GetComponent<MeshCollider>().isTrigger = true;
+
+
+
                 string newname = this.name+"(clip)";
                 GameObject.Find(this.name + "-vertex").name = this.name + "(clipori)-vertex";
                 this.name = this.name +"(clipori)";
@@ -606,10 +729,10 @@
                 GameObject newModelVertex = new GameObject(newname + "-vertex");
                 
                 MeshFilter meshFilter = newModel.AddComponent<MeshFilter>();
-                meshFilter.mesh.vertices = mf.mesh.vertices;
-                meshFilter.mesh.triangles = triangles2.ToArray();
-                meshFilter.mesh.uv = mf.mesh.uv;
-                meshFilter.mesh.normals = mf.mesh.normals;
+                meshFilter.mesh.vertices = vecticesList2.ToArray();
+                meshFilter.mesh.triangles = triangleList2.ToArray();
+                meshFilter.mesh.uv = uvList2.ToArray();
+                meshFilter.mesh.normals = normalList2.ToArray();
                 Renderer newRenderer = newModel.AddComponent<MeshRenderer>();
                 newRenderer.material = this.gameObject.GetComponent<MeshRenderer>().material;
                 newModel.transform.SetParent(transform.parent);
