@@ -325,7 +325,7 @@ public class UIScript : MonoBehaviour {
 	{
 		modelMenu.SetActive(false);
 		importModelMenu.SetActive(true);
-		cancelButton.SetActive(false);
+		cancelButton.SetActive(true);
 		int cnt = importModelMenu.transform.childCount;
 		for (int i = 0; i < cnt; i++)
 		{
@@ -542,7 +542,7 @@ public class UIScript : MonoBehaviour {
         {
             Vector3[] plane1 = GlobalData.selectedPlane[0];
             Vector3[] plane2 = GlobalData.selectedPlane[1];
-            float angle = MathCalculate.llAngle(plane1, plane2);
+            float angle = MathCalculate.ppAngle(plane1, plane2);
             //GameObject.Find("Canvas/InfoMenu/InfoText").GetComponent<Text>().text = "Angle of the two selected planes is : " + angle.ToString() + ".";
 			character.GetComponentInChildren<charEvent>().speakSomething("选中面面夹角为\n" + angle.ToString());
         }
@@ -622,6 +622,7 @@ public class UIScript : MonoBehaviour {
         pyramidMenu.SetActive(false);
         infoMenu.SetActive(false);
         operationMenu.SetActive(false);
+		importModelMenu.SetActive (false);
         int cnt = initMenu.transform.childCount;
         for (int i = 0; i < cnt; i++)
         {

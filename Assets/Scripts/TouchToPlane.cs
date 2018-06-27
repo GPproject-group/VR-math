@@ -531,8 +531,10 @@
             }
             SortAngleList.Sort();
             //切割面
-            GameObject clipPlane = new GameObject("clip plane");
+            GameObject clipPlane = new GameObject(this.name+"(clip plane)");
+            clipPlane.tag = "clipplane";
             clipPlane.transform.parent = GameObject.Find(this.name + "-vertex").transform;
+            clipPlane.transform.localPosition = Vector3.zero;
             clipPlane.AddComponent<MeshFilter>();
             clipPlane.AddComponent<MeshRenderer>();
 
@@ -590,6 +592,8 @@
                 mf.mesh.uv = uvList.ToArray();
             }
             mf.mesh.normals = normalList.ToArray();
+			this.GetComponent<MeshCollider>().sharedMesh = this.GetComponent<MeshFilter>().mesh;
+            this.GetComponent<MeshCollider>().isTrigger = true;
             //分割模型
             if (triangles2.Count > 0)
             {
@@ -629,27 +633,20 @@
                 changeVertexsPoi cv = newModelVertex.AddComponent<changeVertexsPoi>();
                 cv.modelObj = newModel;
 
-                Vector3 w_planeNormal = Vector3.Cross(w_TouchBeganPos - w_TouchEndPos, w_TouchBeganPos - controllerRight.transform.position);
-                Vector3 w_planePoint = w_TouchBeganPos;
-
-
-                Vector3 l_v = meshFilter.mesh.vertices[0];    //local pos
-                Vector3 w_v = l_v + this.transform.position;    //world pos
-                float res = Vector3.Dot(w_planeNormal, w_v) - Vector3.Dot(w_planeNormal, w_planePoint);
-                bool done = false;
-                while (!done)
+                for(int i = 0; i < vertexObj.transform.childCount; i++)
                 {
-                    done = true;
-                    foreach (Transform childTransform in vertexObj.transform)
+                    GameObject vertex = vertexObj.transform.GetChild(i).gameObject;
+                    if (vertex.tag.Equals("clipplane"))
                     {
-                        GameObject vertex = childTransform.gameObject;
-                        Vector3 w_pos = vertex.transform.position;  //world pos
-                        float childRes = Vector3.Dot(w_planeNormal, w_pos) - Vector3.Dot(w_planeNormal, w_planePoint);
-                        if (childRes * res > 0)
-                        {
-                            vertex.transform.parent = newModelVertex.transform;
-                            done = false;
-                        }
+                        continue;
+                    }
+                    float dis = GetPointToClipPlaneDis(vertex.transform.localPosition);
+                    if (dis >0)
+                    {
+                        Vector3 oripos = vertex.transform.localPosition;
+                        vertex.transform.parent = newModelVertex.transform;
+                        vertex.transform.localPosition = oripos;
+                        i--;
                     }
                 }
                 createModel.modelList.Add(newModel);

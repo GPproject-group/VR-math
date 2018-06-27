@@ -8,6 +8,7 @@ TagManager:
   - moved
   - model
   - vertex
+  - clipplane
   layers:
   - Default
   - TransparentFX

@@ -25,6 +25,7 @@ public class OperationScript : MonoBehaviour
         {
             GameObject midpointObj = new GameObject("new point");
             GlobalData.selectedMidpoint.Add(midpointObj);
+			GlobalData.selectedVertex.Add (midpointObj);
             midpointObj.transform.position = (GlobalData.selectedVertex[0].transform.position + GlobalData.selectedVertex[1].transform.position)/2;
             midpointObj.tag = "selected";
             GameObject effect0 = (GameObject)Instantiate(Resources.Load("Prefabs/MagicSphereGreen"));

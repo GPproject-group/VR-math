@@ -72,14 +72,14 @@ public class createModel : MonoBehaviour {
             float angleSin = Mathf.Sin(angle);
             float angleCos = Mathf.Cos(angle);
 
-            vertices[i] = new Vector3(3 * angleCos, 3 * angleSin, 0);
-            vertices[i + 3] = new Vector3(3 * angleCos, 3 * angleSin, 0);
+            vertices[i] = new Vector3(0.5f*angleCos, 0.5f*angleSin, 0);
+            vertices[i + 3] = new Vector3(0.5f*angleCos, 0.5f*angleSin, 0);
             normals[i] = new Vector3(0, 0, -1);
             normals[i + 3] = new Vector3(0, 0, 1);
             uvs[i] = new Vector2(1.0f * i / 3, 1);
             uvs[i + 3] = new Vector2(1.0f * i / 3, 0);
 
-            Points[i] = new Vector3(3 * angleCos, 3 * angleSin, 0);
+            Points[i] = new Vector3(0.5f*angleCos, 0.5f*angleSin, 0);
         }
         /*Points[3] = (vertices[0] + vertices[1]) / 2.0f;
         Points[4] = (vertices[2] + vertices[1]) / 2.0f;
@@ -137,7 +137,8 @@ public class createModel : MonoBehaviour {
         vertexObj.GetComponent<changeVertexsPoi>().modelObj = newTriangle;
 
         //缩放模型
-        newTriangle.transform.localScale = new Vector3(0.3f,0.3f,0.3f);
+		//newTriangle.transform.localScale = new Vector3(0.15f,0.15f,0.15f);
+		newTriangle.transform.position = new Vector3(0,1,0);
         //增加tag
         newTriangle.tag = "model";
         modelList.Add(newTriangle);
@@ -194,14 +195,14 @@ public class createModel : MonoBehaviour {
             float angleSin = Mathf.Sin(angle);
             float angleCos = Mathf.Cos(angle);
 
-            vertices[i] = new Vector3(4 * angleCos, 4 * angleSin, 0);
-            vertices[i + 4] = new Vector3(4 * angleCos, 4 * angleSin, 0);
+            vertices[i] = new Vector3(0.4f * angleCos, 0.4f * angleSin, 0);
+            vertices[i + 4] = new Vector3(0.4f * angleCos, 0.4f * angleSin, 0);
             normals[i] = new Vector3(0, 0, -1);
             normals[i + 4] = new Vector3(0, 0, 1);
             uvs[i] = new Vector2(1.0f * i / 4, 1);
             uvs[i + 4] = new Vector2(1.0f * i / 4, 0);
 
-            Points[i] = new Vector3(4 * angleCos, 4 * angleSin, 0);
+            Points[i] = new Vector3(0.4f * angleCos, 0.4f * angleSin, 0);
         }
         /*Points[4] = (vertices[0] + vertices[1]) / 2.0f;
         Points[5] = (vertices[1] + vertices[2]) / 2.0f;
@@ -270,7 +271,8 @@ public class createModel : MonoBehaviour {
 
 
         //缩放模型
-        newPlane.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+		//newPlane.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+		newPlane.transform.position = new Vector3(0,1,0);
         //增加tag
         newPlane.tag = "model";
         modelList.Add(newPlane);
@@ -314,9 +316,9 @@ public class createModel : MonoBehaviour {
         filter.mesh = mesh;
         newCone.GetComponent<MeshRenderer>().material = mat;
 
-        float myRadius = 0.5f;
+        float myRadius = 0.25f;
         int myAngleStep = 20;
-        Vector3 myTopCenter = new Vector3(0, 1, 0);
+        Vector3 myTopCenter = new Vector3(0, 0.5f, 0);
         Vector3 myBottomCenter = Vector3.zero;
         //构建顶点数组和UV数组
         Vector3[] myVertices = new Vector3[360 / myAngleStep * 2 + 2];
@@ -328,7 +330,7 @@ public class createModel : MonoBehaviour {
         myVertices[myVertices.Length - 1] = myTopCenter;
         myUV[0] = new Vector2(0.5f, 0.5f);
         myUV[myVertices.Length - 1] = new Vector2(0.5f, 0.5f);
-        Points[0] = new Vector3(0, 1, 0);
+        Points[0] = new Vector3(0, 0.5f, 0);
         //因为圆上顶点坐标相同，只是索引不同，所以这里循环一般长度即可
         for (int i = 1; i <= (myVertices.Length - 2) / 2; i++)
         {
@@ -405,6 +407,8 @@ public class createModel : MonoBehaviour {
         vertexObj.AddComponent<changeVertexsPoi>();
         vertexObj.GetComponent<changeVertexsPoi>().modelObj = newCone;
 
+		//newCone.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
+		newCone.transform.position = new Vector3(0,1,0);
         //增加tag
         newCone.tag = "model";
         modelList.Add(newCone);
@@ -449,8 +453,8 @@ public class createModel : MonoBehaviour {
 
 
         float radiusTop = 0f;
-        float radiusBottom = 1f;
-        float length = 1f;
+        float radiusBottom = 0.25f;
+        float length = 0.5f;
         bool outside = true;
         bool inside = true;
 
@@ -645,6 +649,8 @@ public class createModel : MonoBehaviour {
         vertexObj.AddComponent<changeVertexsPoi>();
         vertexObj.GetComponent<changeVertexsPoi>().modelObj = newPyramid;
 
+		//newPyramid.transform.localScale = new Vector3(0.25f,0.25f,0.5f);
+		newPyramid.transform.position = new Vector3(0,1,0);
         //增加tag
         newPyramid.tag = "model";
         modelList.Add(newPyramid);
@@ -690,9 +696,9 @@ public class createModel : MonoBehaviour {
         newCube.GetComponent<MeshRenderer>().material = mat;
 
 
-        float radiusTop = 1f;
-        float radiusBottom = 1f;
-        float length = 1f;
+        float radiusTop = 0.25f;
+        float radiusBottom = 0.25f;
+        float length = 0.5f;
         bool outside = true;
         bool inside = true;
 
@@ -890,6 +896,8 @@ public class createModel : MonoBehaviour {
         vertexObj.AddComponent<changeVertexsPoi>();
         vertexObj.GetComponent<changeVertexsPoi>().modelObj = newCube;
 
+		//newCube.transform.localScale = new Vector3(0.25f,0.25f,0.5f);
+		newCube.transform.position = new Vector3(0,1,0);
         //增加tag
         newCube.tag = "model";
         modelList.Add(newCube);
@@ -934,9 +942,9 @@ public class createModel : MonoBehaviour {
 
 
         int numVertices = 20;
-        float radiusTop = 1f;
-        float radiusBottom = 1f;
-        float length = 1f;
+        float radiusTop = 0.25f;
+        float radiusBottom = 0.25f;
+        float length = 0.5f;
         bool outside = true;
         bool inside = true;
 
@@ -1131,6 +1139,8 @@ public class createModel : MonoBehaviour {
         vertexObj.AddComponent<changeVertexsPoi>();
         vertexObj.GetComponent<changeVertexsPoi>().modelObj = newCylinder;
 
+		//newCylinder.transform.localScale = new Vector3(0.25f,0.25f,0.5f);
+		newCylinder.transform.position = new Vector3(0,1,0);
         //增加tag
         newCylinder.tag = "model";
         modelList.Add(newCylinder);
@@ -1170,7 +1180,7 @@ public class createModel : MonoBehaviour {
     public void DrawSphere()
     {
         int subdivisions = 4;
-        float radius = 1;
+        float radius = 0.25f;
         if (subdivisions > 4)
         {
             subdivisions = 4;
@@ -1178,6 +1188,7 @@ public class createModel : MonoBehaviour {
         num = showPoint.Count;
         string objname = "Sphere" + num;
         GameObject newSphere = new GameObject(objname);
+		newSphere.transform.localScale = new Vector3 (0.3f, 0.3f, 0.3f);
         newSphere.AddComponent<MeshFilter>();
         newSphere.AddComponent<MeshRenderer>();
         newSphere.name = objname;
@@ -1216,31 +1227,12 @@ public class createModel : MonoBehaviour {
         string vertexs = "Sphere" + num + "-vertex";
         GameObject vertexObj = new GameObject(vertexs);
         vertexObj.transform.position = newSphere.transform.position;
-        string pointName = objname + "-Point1";
-        GameObject point = new GameObject(pointName);
-        point.transform.parent = vertexObj.transform;
-        point.transform.position = Points[0];
-
-        point.tag = "vertex";
-        point.AddComponent<SphereCollider>();
-        point.AddComponent<VRTK.Examples.SelectObjectScript>();
-
-        sphereCol = point.GetComponent<SphereCollider>();
-        sphereCol.isTrigger = true;
-        sphereCol.radius = 0.1f;
-        
-        selObjSrc = point.GetComponent<VRTK.Examples.SelectObjectScript>();
-        selObjSrc.holdButtonToGrab = false;
-        selObjSrc.isUsable = true;
-        selObjSrc.pointerActivatesUseAction = true;
-        selObjSrc.controllerRight = controRight;
-
-        GameObject effect = (GameObject)Instantiate(Resources.Load("Prefabs/MagicSphereBlue"));
-        effect.transform.parent = point.transform;
-        effect.transform.localPosition = Vector3.zero;
 
         vertexObj.AddComponent<changeVertexsPoi>();
         vertexObj.GetComponent<changeVertexsPoi>().modelObj = newSphere;
+
+		//newSphere.transform.localScale = new Vector3(0.25f,0.25f,0.25f);
+		newSphere.transform.position = new Vector3(0,1,0);
         //增加tag
         newSphere.tag = "model";
         modelList.Add(newSphere);
@@ -1268,7 +1260,7 @@ public class createModel : MonoBehaviour {
     public void createEllipsoid()
     {
         int subdivisions = 4;
-        float radius = 1;
+        float radius = 0.2f;
         num = showPoint.Count;
         string objname = "Ellipsoid" + num;
         GameObject newEllipsoid = new GameObject(objname);
@@ -1304,31 +1296,12 @@ public class createModel : MonoBehaviour {
         string vertexs = "Sphere" + num + "-vertex";
         GameObject vertexObj = new GameObject(vertexs);
         vertexObj.transform.position = newEllipsoid.transform.position;
-        string pointName = objname + "-Point1";
-        GameObject point = new GameObject(pointName);
-        point.transform.parent = vertexObj.transform;
-        point.transform.position = Points[0];
-
-        point.tag = "vertex";
-        point.AddComponent<SphereCollider>();
-        point.AddComponent<VRTK.Examples.SelectObjectScript>();
-
-        sphereCol = point.GetComponent<SphereCollider>();
-        sphereCol.isTrigger = true;
-        sphereCol.radius = 0.1f;
-
-        selObjSrc = point.GetComponent<VRTK.Examples.SelectObjectScript>();
-        selObjSrc.holdButtonToGrab = false;
-        selObjSrc.isUsable = true;
-        selObjSrc.pointerActivatesUseAction = true;
-        selObjSrc.controllerRight = controRight;
-
-        GameObject effect = (GameObject)Instantiate(Resources.Load("Prefabs/MagicSphereBlue"));
-        effect.transform.parent = point.transform;
-        effect.transform.localPosition = Vector3.zero;
 
         vertexObj.AddComponent<changeVertexsPoi>();
         vertexObj.GetComponent<changeVertexsPoi>().modelObj = newEllipsoid;
+
+		newEllipsoid.transform.localScale = new Vector3(0.3f,0.3f,0.6f);
+		newEllipsoid.transform.position = new Vector3(0,1,0);
         //增加tag
         newEllipsoid.tag = "model";
         modelList.Add(newEllipsoid);
@@ -1352,7 +1325,6 @@ public class createModel : MonoBehaviour {
         vrtkTouch.controllerRight = controRight;
         vrtkTouch.clipMat = matClip;
 
-        newEllipsoid.transform.localScale = new Vector3(1,1,2);
     }
     private static void CreateOctahedron(Vector3[] vertices, int[] triangles, int resolution)
     {
