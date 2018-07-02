@@ -1,7 +1,5 @@
 ﻿namespace VRTK.Examples
 {
-    using System.Collections.Generic;
-    using UnityEditor;
     using UnityEngine;
 
     public class SelectClipPlaneScript : VRTK_InteractableObject
